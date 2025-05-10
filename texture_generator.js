@@ -45,6 +45,25 @@ function applyTexture(layerImageUrl, textureImageUrl, ctx) {
   });
 }
 
+function applyCustomTiledTexture(layerImageUrl, textureImageUrl, ctx) {
+  return new Promise((resolve) => {
+    const layerDrawingImg = new Image();
+    layerDrawingImg.onload = function () {
+      const textureImg = new Image();
+      textureImg.onload = function () {
+        const pattern = ctx.createPattern(textureImg, "repeat");
+        ctx.drawImage(layerDrawingImg, 0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.globalCompositeOperation = "source-in";
+        ctx.fillStyle = pattern;
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        resolve();
+      };
+      textureImg.src = textureImageUrl;
+    };
+    layerDrawingImg.src = layerImageUrl;
+  });
+}
+
 // Function to apply a hex color to the non-transparent pixels of the canvas
 function applyColor(layerImageUrl, hexColor, ctx) {
   console.log("Applying color: " + hexColor);
@@ -462,14 +481,12 @@ export async function update_Model_Texture() {
       const layer_type = get_body_texture_type(current_configured_model.paint_layers[0]);
       const actual_texture = get_texture(current_configured_model.paint_layers[0], layer_type);
 
-      if (layer_type == "Paint" || layer_type == "Custom") {
-
+      if (layer_type == "CustomTiled") {
+        paintLayerPromises.push(applyCustomTiledTexture(trin_model_layers[i].URL, actual_texture.texture, ctx_list[i]));
+      } else if (layer_type == "Paint" || layer_type == "Custom") {
         paintLayerPromises.push(applyColor(trin_model_layers[i].URL, actual_texture.hex, ctx_list[i]));
-      
       } else {
-
         paintLayerPromises.push(applyTexture(trin_model_layers[i].URL, actual_texture.texture, ctx_list[i]));
-      
       }
     }
 
@@ -493,16 +510,12 @@ export async function update_Model_Texture() {
       const layer_type = get_body_texture_type(current_configured_model.paint_layers[i]);
       const actual_texture = get_texture(current_configured_model.paint_layers[i], layer_type);
 
-      if (layer_type == "Paint" || layer_type == "Custom") {
-
-        // Apply the color and push the promise to the list
+      if (layer_type == "CustomTiled") {
+        paintLayerPromises.push(applyCustomTiledTexture(trin_model_layers[i].URL, actual_texture.texture, ctx_list[i]));
+      } else if (layer_type == "Paint" || layer_type == "Custom") {
         paintLayerPromises.push(applyColor(trin_model_layers[i].URL, actual_texture.hex, ctx_list[i]));
-
       } else {
-
-        // Apply the texture and push the promise to the list
         paintLayerPromises.push(applyTexture(trin_model_layers[i].URL, actual_texture.texture, ctx_list[i]));
-
       }
     }
   }
@@ -556,9 +569,18 @@ export async function update_Model_Texture() {
       paintLayerPromises.push(applyColor(TrinModel.interior_layers[i].URL, actual_interior_textile.panel_color, ctx_list[list_index]));
     } else if (TrinModel.interior_layers[i].type == "Stitching") {
       paintLayerPromises.push(applyColor(TrinModel.interior_layers[i].URL, actual_interior_textile.stitching_color, ctx_list[list_index]));
-    } else if (TrinModel.interior_layers[i].type == "Accent" && current_configured_model.has_interior_accent && accent_enabled) {
-      let texture = get_texture(current_configured_model.interior_accent, get_interior_texture_type(current_configured_model.interior_accent));
-      paintLayerPromises.push(applyTexture(TrinModel.interior_layers[i].URL, texture.texture, ctx_list[list_index]));
+    } else if (TrinModel.interior_layers[i].type == "Accent") {
+      if (current_configured_model.has_interior_accent && accent_enabled) {
+        let texture = get_texture(current_configured_model.interior_accent, get_interior_texture_type(current_configured_model.interior_accent));
+        paintLayerPromises.push(applyTexture(TrinModel.interior_layers[i].URL, texture.texture, ctx_list[list_index]));
+      } else {
+        // Handle the default case for Accent
+        if (actual_interior_textile.secondary_base_color) {
+          paintLayerPromises.push(applyColor(TrinModel.interior_layers[i].URL, actual_interior_textile.secondary_base_color, ctx_list[list_index]));
+        } else {
+          paintLayerPromises.push(applyColor(TrinModel.interior_layers[i].URL, actual_interior_textile.panel_color, ctx_list[list_index]));
+        }
+      }
     } else {
       console.log("No interior accent");
     }
@@ -579,7 +601,7 @@ export async function update_Model_Texture() {
   // Generate a PNG URL from the canvas
   const new_texture_URL = generatePngUrlFromCanvas(resultCanvas);
 
-  // Update current_configured_model with the new texture URL, paint layers and paint prices
+  // Update current_configured_model with the new texture URL
   current_configured_model.texture_url = new_texture_URL;
 
   // Get the div with configurator-central-model-render-panel id

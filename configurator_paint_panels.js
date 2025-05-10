@@ -2,7 +2,6 @@ import { get_body_texture_type, factoryColors, factoryWraps, factoryWoods } from
 import { current_configured_model, get_current_full_model } from './comunicator.js';
 import { update_Model_Texture } from './texture_generator.js';
 
-
 /*
 ######################################################################
 Globals
@@ -13,7 +12,8 @@ Globals
 var currentPaint_Layer_Index = 0;
 var currentPaint_Type_Index = 0;
 var is_monochrome = true;
-var exterior_LayerType_Options = ["Paint", "Wrap", "Wood", "Custom"];
+// Add "CustomTiled" to the options
+var exterior_LayerType_Options = ["Paint", "Wrap", "Wood", "Custom", "CustomTiled"];
 
 /*
 ######################################################################
@@ -169,16 +169,23 @@ Create Paint Panels
 export function createPaintShowcasePanel(texture_name = "Glacier White", type = "Paint") {
 
     if (type == "Wrap") {
-        //Get the texture from factoryWraps where name is texture_name
         var color = factoryWraps.find(color => color.name === texture_name);
     } else if (type == "Wood") {
-        //Get the texture from factoryWoods where name is texture_name
         var color = factoryWoods.find(color => color.name === texture_name);
     } else if (type == "Paint") {
-        //Get the hex from factoryColors where name is texture_name
         var color = factoryColors.find(color => color.name === texture_name);
     } else if (type == "Custom") {
-        var color = {name: texture_name, hex: texture_name, price: 5000};
+        var color = { name: texture_name, hex: texture_name, price: 5000 };
+    } else if (type == "CustomTiled") {
+        const customTexture = localStorage.getItem('customTiledTexture');
+        var color = { 
+            name: "Custom Tiled Texture", 
+            texture: customTexture || "https://trin.legends-of-gramdatis.com/img/default_texture.png", 
+            price: 5000 
+        };
+    } else {
+        console.error(`Invalid type "${type}" passed to createPaintShowcasePanel.`);
+        return document.createElement("div"); // Return an empty div as a fallback
     }
 
     // Create the paint showcase panel
@@ -212,6 +219,25 @@ export function createPaintShowcasePanel(texture_name = "Glacier White", type = 
 
         paintShowcasePanelTop.appendChild(showcasePanel);
 
+    } else if (type == "CustomTiled") {
+        paintShowcasePanelTop.style.backgroundColor = "#e0e0e0";
+        paintShowcasePanelTop.style.display = "flex";
+        paintShowcasePanelTop.style.justifyContent = "center";
+        paintShowcasePanelTop.style.alignItems = "center";
+
+        const previewImage = document.createElement("div");
+        const customTexture = localStorage.getItem('customTiledTexture');
+        if (customTexture) {
+            previewImage.style.backgroundImage = `url(${customTexture})`;
+            previewImage.style.backgroundSize = "cover";
+            previewImage.style.backgroundRepeat = "repeat";
+        } else {
+            previewImage.textContent = "No texture uploaded";
+            previewImage.style.color = "#000";
+        }
+        previewImage.style.width = "100%";
+        previewImage.style.height = "100%";
+        paintShowcasePanelTop.appendChild(previewImage);
     }
 
     // Bottom sub-div
@@ -348,8 +374,6 @@ function createButtonSpecificPanel_ExteriorLayers_Selector_LayerType() {
 
     // ======================================================================
 
-    
-
     if (exterior_LayerType_Options[currentPaint_Type_Index] == "Paint") {
         factoryColors.forEach(color => {
             const showcasePanel = createPaintShowcasePanel(color.name, "Paint");
@@ -398,6 +422,38 @@ function createButtonSpecificPanel_ExteriorLayers_Selector_LayerType() {
         });*/
 
         exteriorLayerTypePanel.appendChild(showcasePanel);
+    } else if (exterior_LayerType_Options[currentPaint_Type_Index] == "CustomTiled") {
+        // Display the user's uploaded textures
+        const uploadedTextures = JSON.parse(localStorage.getItem('uploadedTextures')) || [];
+        
+        if (uploadedTextures.length > 0) {
+            uploadedTextures.forEach(texture => {
+                const showcasePanel = createPaintShowcasePanel(texture.name, "CustomTiled");
+                showcasePanel.addEventListener("click", () => {
+                    current_configured_model.paint_layers[currentPaint_Layer_Index] = texture.name;
+                    current_configured_model.paint_price[currentPaint_Layer_Index] = 5000;
+                    updateButtonSpecificPanel_ExteriorLayers_Selected();
+                });
+                exteriorLayerTypePanel.appendChild(showcasePanel);
+            });
+        } else {
+            const noTexturesMessage = document.createElement("p");
+            noTexturesMessage.textContent = "No textures uploaded yet.";
+            noTexturesMessage.style.color = "#000";
+            noTexturesMessage.style.textAlign = "center";
+            exteriorLayerTypePanel.appendChild(noTexturesMessage);
+        }
+
+        // Add a link to the upload page
+        const uploadLink = document.createElement("a");
+        uploadLink.href = "upload_texture.html";
+        uploadLink.textContent = "Upload a new texture";
+        uploadLink.style.display = "block";
+        uploadLink.style.marginTop = "10px";
+        uploadLink.style.textAlign = "center";
+        uploadLink.style.color = "#007BFF";
+        uploadLink.style.textDecoration = "underline";
+        exteriorLayerTypePanel.appendChild(uploadLink);
     } else {
         console.log("Error: Invalid exterior layer type: " + exterior_LayerType_Options[currentPaint_Type_Index]);
     }

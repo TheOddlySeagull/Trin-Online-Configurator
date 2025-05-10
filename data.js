@@ -450,7 +450,7 @@ export const trinCarModels = [
             },
         ],
     },
-    {// Trin Footpather V4 phase 1
+    {// Trin Footpather V4 phase 2
         name: "Trin Footpather",
         vehicle_category: ["Civil"],
         pack_name: "Trin Civil Pack",
@@ -505,6 +505,64 @@ export const trinCarModels = [
                 id: 3,
                 type: "Layer",
                 URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/Trin_Footpather_p2_Paint3.png',
+                can_be_wood: true,
+                shaders_grayscale: '#606060',
+            },
+        ],
+    },
+    {// Trin Footpather V4 Special Six
+        name: "Trin Footpather",
+        vehicle_category: ["Civil"],
+        pack_name: "Trin Civil Pack",
+        image: "https://trin.legends-of-gramdatis.com/model_img/Trin_Footpather_p3.png",
+        variant: "Footpather Special Six",
+        base_engine: "V6",
+        base_wheels: "large",
+        base_seats: 1,
+        base_price: 38000,
+        obj: "https://trin.legends-of-gramdatis.com/model_obj/Trin_Footpather.obj",
+        obj_texture: "https://trin.legends-of-gramdatis.com/model_img/layers/Trin_Footpather_p3_Base.png",
+        interior_layers: [
+            {
+                type: "Base",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/Trin_Footpather_p3_Interior_Base.png',
+                shaders_grayscale: '#606060',
+            },
+            {
+                type: "Fabric",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/Trin_Footpather_p3_Interior_Fabric.png',
+                shaders_grayscale: '#606060',
+            },
+            {
+                type: "Stitching",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/Trin_Footpather_p3_Interior_Stitching.png',
+                shaders_grayscale: '#606060',
+            },
+            {
+                type: "Accent",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/Trin_Footpather_p3_Interior_Accent.png',
+                shaders_grayscale: '#606060',
+            },
+        ],
+        paint_layers: [
+            {
+                id: 0,
+                type: "Base",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/Trin_Footpather_p3_Base.png',
+                can_be_wood: false,
+                shaders_grayscale: '#606060',
+            },
+            {
+                id: 1,
+                type: "Layer",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/Trin_Footpather_p3_Paint1.png',
+                can_be_wood: false,
+                shaders_grayscale: '#606060',
+            },
+            {
+                id: 2,
+                type: "Layer",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/Trin_Footpather_p3_Paint2.png',
                 can_be_wood: true,
                 shaders_grayscale: '#606060',
             },
@@ -3339,6 +3397,8 @@ export function get_body_texture_type(texture_name) {
         var texture_type = "Wood";
     } else if (texture_name.startsWith("#")) {
         var texture_type = "Custom";
+    } else if (texture_name.startsWith("data:image/")) {
+        var texture_type = "CustomTiled";
     } else {
         console.log("Body texture type not found");
     }

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trin - Upload Custom Skins</title>
+    <link rel="icon" href="https://trin.legends-of-gramdatis.com/img/trin_logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header section -->
+    <header>
+        <a href="https://trin.legends-of-gramdatis.com">
+            <div class="header-image-cluster">
+                <img class="logo" src="https://trin.legends-of-gramdatis.com/img/trin_logo.png" alt="Trin Logo">
+                <img class="header-image" src="https://trin.legends-of-gramdatis.com/img/fancy_trin_text.png" alt="Fancy Trin Text">
+            </div>
+        </a>
+        <div class="my-configurations">
+            <a href="https://trin.legends-of-gramdatis.com/trin_user_configurations.html" class="my-configurations-link">My Configurations</a>
+        </div>
+    </header>
+
+    <!-- Main content section -->
+    <main>
+        <h1>Upload Your Custom Skins</h1>
+        <p>Upload your custom textures to use them in the configurator. You can also view and manage your uploaded skins below.</p>
+
+        <!-- Upload Section -->
+        <div class="custom-tiled-upload-container">
+            <h2>Upload a New Skin</h2>
+            <input type="file" id="upload-input" accept="image/*">
+            <button id="upload-button">Upload</button>
+        </div>
+
+        <!-- Uploaded Skins Section -->
+        <div class="custom-tiled-upload-container">
+            <h2>Your Uploaded Skins</h2>
+            <div id="uploaded-skins-container">
+                <!-- Dynamically generated uploaded skins will appear here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer section -->
+    <footer>
+        <p>&copy; 2024 Trin - Trims of freedom. All rights reserved.</p>
+    </footer>
+
+    <script type="module">
+        // Get references to DOM elements
+        const uploadInput = document.getElementById("upload-input");
+        const uploadButton = document.getElementById("upload-button");
+        const uploadedSkinsContainer = document.getElementById("uploaded-skins-container");
+
+        // Load uploaded skins from localStorage
+        function loadUploadedSkins() {
+            const skins = JSON.parse(localStorage.getItem("uploadedSkins")) || [];
+            uploadedSkinsContainer.innerHTML = ""; // Clear the container
+
+            skins.forEach((skin, index) => {
+                const skinDiv = document.createElement("div");
+                skinDiv.classList.add("custom-tiled-preview");
+
+                const skinImage = document.createElement("div");
+                skinImage.classList.add("custom-tiled-preview-image");
+                skinImage.style.backgroundImage = `url(${skin})`;
+
+                const removeButton = document.createElement("button");
+                removeButton.textContent = "Remove";
+                removeButton.classList.add("custom-tiled-upload-remove-button");
+                removeButton.addEventListener("click", () => {
+                    removeSkin(index);
+                });
+
+                skinDiv.appendChild(skinImage);
+                skinDiv.appendChild(removeButton);
+                uploadedSkinsContainer.appendChild(skinDiv);
+            });
+        }
+
+        // Save a new skin to localStorage
+        function saveSkin(skinDataUrl) {
+            const skins = JSON.parse(localStorage.getItem("uploadedSkins")) || [];
+            skins.push(skinDataUrl);
+            localStorage.setItem("uploadedSkins", JSON.stringify(skins));
+            loadUploadedSkins();
+        }
+
+        // Remove a skin from localStorage
+        function removeSkin(index) {
+            const skins = JSON.parse(localStorage.getItem("uploadedSkins")) || [];
+            skins.splice(index, 1);
+            localStorage.setItem("uploadedSkins", JSON.stringify(skins));
+            loadUploadedSkins();
+        }
+
+        // Handle file upload
+        uploadButton.addEventListener("click", () => {
+            const file = uploadInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    saveSkin(event.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert("Please select a file to upload.");
+            }
+        });
+
+        // Initial load of uploaded skins
+        loadUploadedSkins();
+    </script>
+</body>
+</html>
