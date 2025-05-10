@@ -1,0 +1,1150 @@
+/* CSS styles for the website */
+
+/*
+############################################################################
+Default browser styles
+############################################################################
+*/
+
+html {
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_trin.png);
+    background-repeat: repeat;
+    background-size: 64px;
+    height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+main {
+    padding: 2rem;
+}
+
+h2 {
+    text-align: center;
+}
+
+/*
+############################################################################
+Footer and logos
+############################################################################
+*/
+
+.logo {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+    cursor: pointer;
+    image-rendering: pixelated;
+}
+
+.header-image {
+    width: 100px;
+    height: auto;
+    cursor: pointer;
+    image-rendering: pixelated;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+
+    /* Center the content vertically and horizontally */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+}
+
+/*
+############################################################################
+Header elements
+############################################################################
+*/
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+header a {
+    text-decoration: none;
+}
+
+.header-image-cluster {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.my-configurations {
+    margin-left: auto;
+}
+
+/*
+############################################################################
+Card related styles
+- Civil
+- TXS
+- Commercial
+############################################################################
+*/
+
+/*
+############################################################################
+Card related styles - Civil
+############################################################################
+*/
+
+/* Main card body */
+.civil-model-card {
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_trin_modelcard.png);
+    background-size: 64px;
+    background-repeat: repeat;
+    image-rendering: pixelated;
+    border: 3px solid #000;
+    color: #f0f0f0;
+    
+    padding: 1rem;
+    /* Set the display mode to flex and adjust the alignment of the items */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 350px;
+    height: 100%;
+
+    min-width: 250px;
+}
+
+/* Apply the 100% width to the image inside the model-card */
+.civil-model-card img {
+    width: 100%;
+    height: auto;
+}
+
+/* Apply the 100% width to the image inside the model-card */
+.civil-model-card-main-picture {
+    height: auto;
+    width: 100%;
+}
+
+/* Card - Title division */
+.civil-model-title {
+    padding: 10px;
+  
+    /* Adjust width and display properties */
+    width: 100%;
+    display: block;
+  
+    /* Stick to the top and create padding above */
+    position: relative;
+    margin-top: -10px;
+  
+    text-align: center;
+  
+    /* Text styles */
+    font-size: 25px;
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5); /* Add a shadow effect */
+    color: #99FFFF;
+}
+
+/* Card - Model Variant division */
+.civil-model-variant {
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_trin_modelcard_title.png);
+    border: 2px solid #000;
+    color: #f0f0f0;
+    padding: 3px;
+    text-align: center;
+
+    /* Adjust width and display properties */
+    width: 100%;
+    display: block;
+}
+
+/* Card - Base Part List Title division */
+.civil-model-base-part-title {
+    text-align: left;
+    margin-bottom: 0%;
+
+    /* Adjust width and display properties */
+    width: 70%;
+    display: block;
+}
+
+/* Card - Base Part List division */
+.civil-model-details {
+    background-color: #404040;
+    text-align: justify;
+    padding: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 14px;
+
+    /* Adjust width and display properties */
+    width: 70%;
+    display: block;
+}
+
+/* Card - "Configure" button */
+.civil-model-generate-button {
+    background-color: #303030; /* Green background color */
+    color: #909090; /* Text color */
+    border: 2px solid #000; /* Black border */
+    padding: 10px 20px; /* Padding */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Cursor style on hover */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3); /* Volume effect with box shadow */
+}
+
+/*
+############################################################################
+Card related styles - TXS
+############################################################################
+*/
+
+/* Main card body */
+.txs-model-card {
+    background-image: url(https://trin.legends-of-gramdatis.com/img/txs_background.png);
+    background-size: 68px;
+    background-repeat: repeat;
+    image-rendering: pixelated;
+    border: 3px solid #B70000;
+    color: #f0f0f0;
+    padding: 1rem;
+    /* Set the display mode to flex and adjust the alignment of the items */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 350px;
+    height: 100%;
+
+    min-width: 250px;
+}
+
+/* Apply the 100% width to the image inside the model-card */
+.txs-model-card img {
+    width: 100%;
+    height: auto;
+}
+
+/* Apply the 100% width to the image inside the model-card */
+.txs-model-card-main-picture {
+    height: auto;
+    width: 100%;
+}
+
+/* Card - Title division */
+.txs-model-title {
+    padding: 10px;
+  
+    /* Adjust width and display properties */
+    width: 100%;
+    display: block;
+  
+    /* Stick to the top and create padding above */
+    position: relative;
+    margin-top: -10px;
+  
+    text-align: center;
+  
+    /* Text styles */
+    font-size: 25px;
+    color: #FF0000;
+    text-shadow: 4px 4px 4px #000; /* Add a shadow effect */
+}
+
+/* Card - Model Variant division */
+.txs-model-variant {
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_trin_modelcard_title.png);
+    background-size: 64px;
+    border: 3px solid #B70000;
+    color: #f0f0f0;
+    padding: 3px;
+    text-align: center;
+
+    /* Adjust width and display properties */
+    width: 100%;
+    display: block;
+}
+
+/* Card - Base Part List Title division */
+.txs-model-base-part-title {
+    text-align: left;
+    margin-bottom: 0%;
+
+    /* Adjust width and display properties */
+    width: 70%;
+    display: block;
+}
+
+/* Card - Base Part List division */
+.txs-model-details {
+    background-color: #161616;
+    text-align: justify;
+    padding: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 14px;
+
+    /* Adjust width and display properties */
+    width: 70%;
+    display: block;
+}
+
+/* Card - "Configure" button */
+.txs-model-generate-button {
+    background-image: url(https://trin.legends-of-gramdatis.com/img/grill_background.png);
+    background-size: 64px;
+    border: 2px solid #B70000;
+    color: #FF0000;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+/*
+############################################################################
+Card related styles - Commercial
+############################################################################
+*/
+
+/* Main card body */
+.commercial-model-card {
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_factory.png);
+    background-size: 72px;
+    background-repeat: repeat;
+    image-rendering: pixelated;
+    border: 3px solid #000;
+    color: #f0f0f0;
+    padding: 1rem;
+    /* Set the display mode to flex and adjust the alignment of the items */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 350px;
+    height: 100%;
+
+    min-width: 250px;
+}
+
+/* Apply the 100% width to the image inside the model-card */
+.commercial-model-card img {
+    width: 100%;
+    height: auto;
+}
+
+/* Apply the 100% width to the image inside the model-card */
+.commercial-model-card-main-picture {
+    height: auto;
+    width: 100%;
+}
+
+/* Card - Title division */
+.commercial-model-title {
+    padding: 10px;
+  
+    /* Adjust width and display properties */
+    width: 100%;
+    display: block;
+  
+    /* Stick to the top and create padding above */
+    position: relative;
+    margin-top: -10px;
+  
+    text-align: center;
+  
+    /* Text styles */
+    font-size: 25px;
+    font-size: 25px;
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+    color: #99FFFF;
+}
+
+/* Card - Model Variant division */
+.commercial-model-variant {
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_trin_modelcard_title.png);
+    background-size: 64px;
+    border: 3px solid #000;
+    color: #f0f0f0;
+    padding: 3px;
+    text-align: center;
+
+    /* Adjust width and display properties */
+    width: 100%;
+    display: block;
+}
+
+/* Card - Base Part List Title division */
+.commercial-model-base-part-title {
+    text-align: left;
+    margin-bottom: 0%;
+
+    /* Adjust width and display properties */
+    width: 70%;
+    display: block;
+}
+
+/* Card - Base Part List division */
+.commercial-model-details {
+    background-color: #686868;
+    text-align: justify;
+    padding: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 14px;
+
+    /* Adjust width and display properties */
+    width: 70%;
+    display: block;
+}
+
+/* Card - "Configure" button */
+.commercial-model-generate-button {
+    background-color: #303030;
+    color: #909090;
+    border: 2px solid #000;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+/*
+############################################################################
+Model container and scroll buttons
+############################################################################
+*/
+
+/* Model container (the one that holds all the civil model cards) */
+.civil-model-container {
+
+    gap: 1rem;
+    padding-bottom: 1rem;
+
+    display: flex;
+    flex-direction: row;
+
+    /*wrap the content*/
+    /*flex-wrap: wrap;*/
+
+    /*Make it has max width*/
+    width: 100%;
+
+    /* Make it scrollable */
+    overflow-x: auto;
+
+    /* Change the scrollbar color */
+    scrollbar-color: #99FFFF #161616;
+
+}
+
+/* Model container (the one that holds all the txs model cards) */
+.txs-model-container {
+
+    gap: 1rem;
+    padding-bottom: 1rem;
+
+    display: flex;
+    flex-direction: row;
+
+    /*Make it has max width*/
+    width: 100%;
+
+    /* Make it scrollable */
+    overflow-x: auto;
+
+    /* Change the scrollbar color */
+    scrollbar-color: #B70000 #161616;
+    
+}
+
+/* Model container (the one that holds all the txs model cards) */
+.commercial-model-container {
+
+    gap: 1rem;
+    padding-bottom: 1rem;
+
+    display: flex;
+    flex-direction: row;
+
+    /*Make it has max width*/
+    width: 100%;
+
+    /* Make it scrollable */
+    overflow-x: auto;
+
+    /* Change the scrollbar color */
+    scrollbar-color: #B8B7B5 #161616;
+    
+}
+
+/*
+############################################################################
+Online configurator styles
+############################################################################
+
+The online configurator has 2 main sections:
+ - Configurator header
+ - Configurator central
+ They are both one above the other.
+ 
+*/
+
+/* main style */
+.model-configurator-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/*
+############################################################################
+Configurator Header:
+This contains 3 elements:
+ - Model name and variant
+ - Small model Preview
+ - Current configuration price
+############################################################################
+*/
+
+/* Configurator - Header (Main)*/
+.configurator-header {
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_trin_modelcard_title.png);
+    background-size: 32px;
+    border: 3px solid #000000;
+    padding: 3px;
+
+    display: flex;
+    flex-direction: row;
+
+    height: 10%;
+
+    justify-content: space-between;
+}
+
+/* 
+############################################################################
+Configurator Central:
+ This contains 3 panels:
+  - Button panel
+  - Button Specific Menu panel
+  - Model panel
+  Each panel is side by side.
+############################################################################
+*/
+
+.configurator-central {
+    border-bottom: #000 3px solid;
+    display: flex;
+    flex-direction: line;
+    height: 90%;
+
+    overflow-y: hidden;
+}
+
+/*
+############################################################################
+Configurator Header Elements:
+############################################################################
+*/
+
+/* Configurator Header - Model name and variant */
+.configurator-header-full-model {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+}
+
+/* Configurator Header - Small model Preview */
+.configurator-header-small-model {
+
+    height: 100%;
+    display: flex;
+
+    /* Make content centered vertically and horizontally */
+    justify-content: center;
+    align-items: center;
+
+}
+
+/* Configurator Header - Current configuration price */
+.configurator-header-price {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: right;
+}
+
+/*
+############################################################################
+Configurator Header - Generic styles
+############################################################################
+*/
+
+/* Configurator - Header - h3 */
+.configurator-header h3 {
+    margin: 2px;
+    font-size: medium;
+}
+
+/* Configurator - Header - h2 */
+.configurator-header h2 {
+    margin: 2px;
+    font-size: larger;
+}
+
+/*
+############################################################################
+Configurator Central Elements:
+############################################################################
+*/
+
+/* Button panel */
+.configurator-central-button-panel {
+    border: #000 1px solid;
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_trin_modelcard.png);
+    background-size: 64px;
+    background-repeat: repeat;
+    image-rendering: pixelated;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    width: 15%;
+    height: 100%;
+
+    min-width: 200px;
+
+    overflow-y: auto;
+
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+    ::-webkit-scrollbar-corner {
+        background-color: transparent;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Button Specific Menu panel */
+.configurator-central-buttonspecific-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* Add these new styles to position the paint panel under the configurator header */
+    width: 15%;
+    height: 100%;
+
+    /* Make each sub-div have a space between them */
+    gap: 5px;
+    padding-top: 5px;
+
+    min-width: 200px;
+
+    overflow: hidden;
+
+}
+
+/* Model panel */
+.configurator-central-model-render-panel {
+
+    /* Add these new styles to position the model render panel under the configurator header */
+    width: 70%;
+    height: 100%;
+
+    /* make content centered */
+    display: flex;
+    justify-content: center;
+
+    min-width: 600px;
+
+    overflow: hidden;
+
+}
+
+/*
+############################################################################
+Configurator Central - Generic styles
+############################################################################
+*/
+
+.configurator-central-model-render-panel img {
+    width: auto;
+    height: 80%;
+    
+    /* vertically centered */
+    margin: auto;
+}
+
+.configurator-header-small-model img {
+    width: auto;
+    height: 100%;
+    
+    /* vertically centered */
+    margin: auto;
+}
+
+.configurator-central-button-panel h2 {
+    background-color: #404040;
+    width: 90%;
+    
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+############################################################################
+Other elements and sub-elements:
+############################################################################
+*/
+
+/* Button Category Container */
+.button_category_container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 90%;
+    padding: 5px;
+}
+
+/* Main button from Button panel */
+.main-button {
+    background-color: #303030;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Sub-button (self) Button panel */
+.sub-button {
+    background-color: #505050;
+    color: #fff;
+    border: none;
+    padding: 5px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 90%;
+    margin-left: auto;
+}
+
+/* Button that sends to "my configurrations" */
+.my-configurations-link {
+    padding: 5px;
+
+    margin-inline: 3px;
+    margin-inline-start: 6px;
+    margin-inline-end: 6px;
+
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+
+    /*Color*/
+    background-color: #B8B7B5;
+    border: #99FFFF 2px solid;
+    color: #000000;
+
+    /*shadow*/
+    box-shadow: 2px 2px 2px #000000;
+}
+
+/*
+############################################################################
+Paint related divs
+############################################################################
+*/
+
+.paint-option-selected {
+
+    /* Border */
+    border: #303030 4px solid;
+
+    /* Background */
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_trin_modelcard_title.png);
+    background-size: 64px;
+    background-repeat: repeat;
+    image-rendering: pixelated;
+
+    /* make content centered */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    /* Size */
+    width: 90%;
+    padding: 3px;
+    gap: 3px;
+}
+
+.paint-option-selector {
+
+    /* Border */
+    border: #303030 4px solid;
+
+    /* Background */
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_trin_modelcard_title.png);
+    background-size: 64px;
+    background-repeat: repeat;
+    image-rendering: pixelated;
+
+    /* make content centered */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    /* Size */
+    width: 90%;
+    padding: 3px;
+    gap: 3px;
+
+    overflow: hidden;
+}
+
+.paint-option-selected h1 {
+    margin: 2px;
+    font-size: larger;
+}
+
+.paint-option-button {
+    background-color: #909090;
+    border: 1px solid #000000;
+    width: 100%;
+    cursor: pointer;
+    min-height: 30px;
+    font-size: large;
+}
+
+.interior-option-selector {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+
+    width: 100%;
+
+    overflow-y: scroll;
+    overscroll-behavior-block: contain;
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+    ::-webkit-scrollbar-corner {
+        background-color: transparent;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Paint option container - color + color name and price*/
+
+.paint-option-container {
+    width: 100%;
+    height: 100px;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    min-height: 100px;
+}
+
+.paint-option-container-color {
+    height: 70%;
+    background-color: #f0f0f0; 
+}
+
+.paint-option-container-name {
+    height: 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+    border-top: 1px solid #000;
+}
+
+/* Interior option container - textile color + name and price*/
+
+.interior-option-container {
+    width: 100%;
+    height: 100px;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    min-height: 100px;
+}
+
+.interior-option-container-color {
+    height: 70%;
+    background-color: #f0f0f0; 
+}
+
+.interior-option-container-name {
+    height: 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+    border-top: 1px solid #000;
+}
+
+
+/* Paint option list - list of paint-option-container */
+
+.paint-option-cycle-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.paint-option-cycle-button-arrow {
+    background-color: #909090;
+    border: 1px solid #000000;
+    margin: 2px;
+    width: 20%;
+    cursor: pointer;
+
+    /* center text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.paint-option-cycle-button-text {
+    background-color: #909090;
+    border: 1px solid #000000;
+    margin: 2px;
+    width: 60%;
+
+    /* center text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.paint-option-list-container {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+    width: 100%;
+
+    /* Make it scrollable */
+    overflow-y: scroll;
+    overscroll-behavior-block: contain;
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+    ::-webkit-scrollbar-corner {
+        background-color: transparent;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/*
+############################################################################
+Configurator Viewer STyles
+############################################################################
+*/
+
+/* Main global card */
+.saved-configuration-card-main {
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_trin_modelcard.png);
+    background-size: 64px;
+    background-repeat: repeat;
+    image-rendering: pixelated;
+    color: #99FFFF;
+
+    /* make content centered */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    /* Size */
+    min-width: 200px;
+    min-height: 300px;
+
+    /* Shadow */
+    box-shadow: 5px 5px 5px #000000;
+
+    /* Gap between cards */
+    margin-bottom: 5rem;
+    margin-top: 2rem;
+
+}
+
+.saved-configuration-card-title {
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_trin_modelcard_title.png);
+    background-size: 64px;
+    background-repeat: repeat;
+    image-rendering: pixelated;
+    border: 3px solid #000;
+    width: 100%;
+
+    /* make content centered */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    color: #99FFFF;
+    /*shadow*/
+    text-shadow: 2px 2px 2px #000000;
+}
+
+.saved-configuration-card-title h3 {
+    margin: 5px;
+}
+
+.saved-configuration-card-central {
+    border-left: 3px solid #000;
+    border-right: 3px solid #000;
+    width: 100%;
+
+    min-height: 200px;
+    height: 100%;
+
+    /*make content in line*/
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.saved-configuration-card-details {
+    border-right: 3px solid #000;
+    width: 20%;
+    padding: 5px;
+}
+
+.saved-configuration-card-details h4 {
+    margin: 5px;
+}
+
+.saved-configuration-card-details ul {
+    margin: 0;
+    /* leave space at the end of the list */
+    padding-block-end: 10px;
+}
+
+.saved-configuration-card-renderer {
+    overflow: hidden;
+    height: 100%;
+    max-height: 500px;
+
+    /*make content centered*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.saved-configuration-card-price {
+    background-image: url(https://trin.legends-of-gramdatis.com/img/background_trin_modelcard_title.png);
+    background-size: 64px;
+    background-repeat: repeat;
+    image-rendering: pixelated;
+    border: 3px solid #000;
+    width: 100%;
+
+    /* make content centered */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    color: #99FFFF;
+    /*shadow*/
+    text-shadow: 2px 2px 2px #000000;
+}
+
+.saved-configuration-card-price p {
+    margin: 5px;
+}
+
+.saved-configuration-card-button-panel {
+    border-left: 3px solid #000;
+    border-right: 3px solid #000;
+    border-bottom: 3px solid #000;
+    width: 100%;
+    min-height: 50px;
+
+    /*make content in line*/
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.saved-configuration-card-button {
+
+    padding: 5px;
+
+    margin-inline: 3px;
+    margin-inline-start: 6px;
+    margin-inline-end: 6px;
+
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+
+    width: 100%;
+
+    /*Color*/
+    background-color: #B8B7B5;
+    border: #99FFFF 2px solid;
+
+    /*shadow*/
+    box-shadow: 2px 2px 2px #000000;
+}

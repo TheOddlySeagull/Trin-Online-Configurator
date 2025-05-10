@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Trin - Trims of freedom - online configurator</title>
+        <link rel="icon" href="https://trin.legends-of-gramdatis.com/img/trin_logo.png" type="image/png">
+        <link rel="stylesheet" href="style.css">
+        <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+        <script type="importmap">
+          {
+            "imports": {
+              "three": "https://unpkg.com/three@0.154.0/build/three.module.js",
+              "three/addons/": "https://unpkg.com/three@0.154.0/examples/jsm/"
+            }
+          }
+        </script>
+      </head>
+<body>
+    <!-- Header section -->
+    <header>
+        <!-- Logo and image with anchor tags linking to the desired URL -->
+        <a href="https://trin.legends-of-gramdatis.com" >
+            <div class="header-image-cluster">
+                <img class="logo" src="https://trin.legends-of-gramdatis.com/img/trin_logo.png" alt="Trin Logo">
+                <img class="header-image" src="https://trin.legends-of-gramdatis.com/img/fancy_trin_text.png" alt="Fancy trin Text">
+            </div>
+        </a>
+
+        <div class="my-configurations">
+            <a href="https://trin.legends-of-gramdatis.com/trin_user_configurations.html" class="my-configurations-link">My Configurations</a>
+        </div>
+    </header>
+
+    <!-- Main content section -->
+    <main>
+        
+        <h1>Your saved Configurations</h1>
+        <p>Here you can see all the configurations you have saved.</p>
+
+        <div id="saved-configurations-container">
+            <!-- Here you will dynamically generate the divs for Trin car models using JavaScript -->
+        </div>
+
+    </main>
+
+    <!-- Footer section -->
+    <footer>
+        <p>&copy; 2024 Trin - Trims of freedom. All rights reserved.</p>
+    </footer>
+
+    <script src="configuration_saved.js" type="module"></script>
+
+</body>
+</html>
