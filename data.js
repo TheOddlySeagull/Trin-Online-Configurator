@@ -2846,6 +2846,11 @@ export const factoryColors = [
         price: 250,
     },
     {
+        name: "Patrol Blue",
+        hex: "#4079B2",
+        price: 100,
+    },
+    {
         name: "Teal",
         hex: "#258BC8",
         price: 250,
@@ -2869,6 +2874,11 @@ export const factoryColors = [
         name: "Lavender Blue",
         hex: "#3F497F",
         price: 250,
+    },
+    {
+        name: "Seafoam",
+        hex: "#9FE2BF",
+        price: 200,
     },
     {
         name: "Soft Green",
@@ -3365,10 +3375,10 @@ export const interiorColors = [
     },
     {
         name: "Gray & Blue",
-        base_color: "#404040",
+        base_color: "#3A3A3A",
         panel_color: "#142168",
-        stitching_color: "#CCCCCC",
-        secondary_base_color: "#0F0F0F",
+        stitching_color: "#BFBFBF",
+        secondary_base_color: "#1A1A1A",
         price: 500,
         background_url: "https://trin.legends-of-gramdatis.com/car_texture_layers/interior/Interior_Showcase_GrayBlue.png",
     },
