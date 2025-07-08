@@ -2936,6 +2936,11 @@ export const factoryColors = [
         price: 250,
     },
     {
+        name: "Gramados Amber",
+        hex: "#FF6400",
+        price: 250,
+    },
+    {
         name: "Fire Orange",
         hex: "#FB3700",
         price: 250,
@@ -2994,6 +2999,11 @@ export const factoryColors = [
         name: "Amber",
         hex: "#4E0C00",
         price: 250,
+    },
+    {
+        name: "Gunstock",
+        hex: "#1A0B01",
+        price: 300,
     },
     {
         name: "Midnight Purple",
