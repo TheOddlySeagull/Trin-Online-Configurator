@@ -2704,58 +2704,6 @@ export const trinCarModels = [
             }
         ],
     },
-    {// SMF Ryusei
-        name: "Syndicate Ryusei",
-        vehicle_category: ["Civil"],
-        pack_name: "Syndicate Motor Foundry",
-        image: "https://trin.legends-of-gramdatis.com/model_img/SMF_Ryusei.png",
-        variant: "Ryusei",
-        base_engine: "I4",
-        base_wheels: "compact",
-        base_seats: 1,
-        base_price: 79500,
-        obj: "https://trin.legends-of-gramdatis.com/model_obj/Ryusei.obj",
-        obj_texture: "https://trin.legends-of-gramdatis.com/model_img/layers/ryusei_Base.png",
-        skin_size_w: 256,
-        skin_size_h: 256,
-        interior_layers: [
-            {
-                type: "Base",
-                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/ryusei_Interior_Base.png',
-                shaders_grayscale: '#606060',
-            },
-            {
-                type: "Fabric",
-                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/ryusei_Interior_Fabric.png',
-                shaders_grayscale: '#606060',
-            },
-            {
-                type: "Stitching",
-                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/ryusei_Interior_Stitching.png',
-                shaders_grayscale: '#606060',
-            }
-        ],
-        paint_layers: [
-            {
-                id: 0,
-                type: "Base",
-                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/ryusei_Base.png',
-                shaders_grayscale: '#606060',
-            },
-            {
-                id: 1,
-                type: "Layer",
-                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/ryusei_Paint1.png',
-                shaders_grayscale: '#606060',
-            },
-            {
-                id: 2,
-                type: "Overlay",
-                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/ryusei_overlay.png',
-                shaders_grayscale: '#606060',
-            }
-        ],
-    },
 ];
 
 // Define a mapping of part IDs to part texts
