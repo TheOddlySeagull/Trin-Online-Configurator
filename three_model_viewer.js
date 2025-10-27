@@ -4,7 +4,25 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 export function addTextureToModel(object, textureURL) {
   const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load(textureURL);
+  // Ensure cross-origin textures from CDN work on GitHub Pages
+  if (typeof textureLoader.setCrossOrigin === 'function') {
+    textureLoader.setCrossOrigin('anonymous');
+  } else {
+    textureLoader.crossOrigin = 'anonymous';
+  }
+
+  // Load texture with error handling
+  const texture = textureLoader.load(
+    textureURL,
+    () => {
+      // success
+      texture.needsUpdate = true;
+    },
+    undefined,
+    (err) => {
+      console.error('Failed to load texture:', textureURL, err);
+    }
+  );
 
   // Texture encoding, and alpha channel for PNGs
   texture.encoding = THREE.sRGBEncoding;

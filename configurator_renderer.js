@@ -53,13 +53,24 @@ export function createRenderPanel(model, obj_texture = model.obj_texture) {
   renderPanel.appendChild(renderer.domElement);
 
   // Load the 3D model
-  const loader = new OBJLoader()
+  const loader = new OBJLoader();
   const modelURL = model.obj;
-  loader.load(modelURL, (object) => {
-    // Add the texture to the model
-    addTextureToModel(object, obj_texture);
-    scene.add(object);
-  });
+  loader.load(
+    modelURL,
+    (object) => {
+      // Add the texture to the model
+      try {
+        addTextureToModel(object, obj_texture);
+      } catch (e) {
+        console.error('Error applying texture to model:', obj_texture, e);
+      }
+      scene.add(object);
+    },
+    undefined,
+    (err) => {
+      console.error('Failed to load OBJ model:', modelURL, err);
+    }
+  );
 
   // Add some lighting
   const ambientLight = new THREE.AmbientLight(0xe0e0e0, 1);
