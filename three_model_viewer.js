@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { resolveAssetURL } from './asset_path.js';
 
 export function addTextureToModel(object, textureURL) {
   const textureLoader = new THREE.TextureLoader();
@@ -12,15 +13,16 @@ export function addTextureToModel(object, textureURL) {
   }
 
   // Load texture with error handling
+  const resolvedURL = resolveAssetURL(textureURL);
   const texture = textureLoader.load(
-    textureURL,
+    resolvedURL,
     () => {
       // success
       texture.needsUpdate = true;
     },
     undefined,
     (err) => {
-      console.error('Failed to load texture:', textureURL, err);
+      console.error('Failed to load texture:', resolvedURL, err);
     }
   );
 

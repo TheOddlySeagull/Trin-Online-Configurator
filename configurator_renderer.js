@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; 
 import { addTextureToModel } from './three_model_viewer.js';
+import { resolveAssetURL } from './asset_path.js';
 
 // ######################################################################
 
@@ -54,7 +55,7 @@ export function createRenderPanel(model, obj_texture = model.obj_texture) {
 
   // Load the 3D model
   const loader = new OBJLoader();
-  const modelURL = model.obj;
+  const modelURL = resolveAssetURL(model.obj);
   loader.load(
     modelURL,
     (object) => {

@@ -12,7 +12,8 @@ This site is a static ES Modules app. Three.js and its loaders are pulled from a
 1. Import map polyfill ordering
    - The import map shim is included before the import map and module scripts, without `async`, to avoid races on slower networks.
 2. CORS for external assets
-   - Models and textures are fetched cross-origin. Ensure the host `https://trin.legends-of-gramdatis.com` sends CORS headers:
+   - Models and textures can now be resolved to same-origin when on GitHub Pages via `asset_path.js`.
+   - If you keep absolute external URLs, ensure the host `https://trin.legends-of-gramdatis.com` sends CORS headers:
      - `Access-Control-Allow-Origin: *` (or your page origin)
      - `Access-Control-Allow-Methods: GET`
    - Texture loading is configured with `crossOrigin: 'anonymous'` in `three_model_viewer.js`.
@@ -33,6 +34,9 @@ You can use a simple static server to preview locally with correct module behavi
 python3 -m http.server 8080
 # then open http://localhost:8080
 ```
+
+## Asset resolution
+- Asset URLs in `data.js` are absolute for the custom domain. The loaders call `resolveAssetURL()` to rewrite those URLs to the current site base (e.g., `https://<user>.github.io/trin/`) so the same code works on both GitHub Pages and the custom domain.
 
 ## Updating three.js
 If you bump Three.js, update both mappings in the import map:
