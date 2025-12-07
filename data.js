@@ -2704,6 +2704,67 @@ export const trinCarModels = [
             }
         ],
     },
+    {// Trin Trumon
+        name: "Trin Trumon",
+        vehicle_category: ["Commercial"],
+        pack_name: "Trin Civil Pack",
+        image: "https://trin.legends-of-gramdatis.com/model_img/trin_trumon.png",
+        variant: "Truck",
+        base_engine: "I4",
+        base_wheels: "standard",
+        base_seats: 1,
+        base_price: 32700,
+        obj: "https://trin.legends-of-gramdatis.com/model_obj/trin_trumon.obj",
+        obj_texture: "https://trin.legends-of-gramdatis.com/model_img/layers/trin_trumon_Base.png",
+        interior_layers: [
+            {
+                type: "Base",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/trin_trumon_Interior_Base.png',
+                shaders_grayscale: '#606060',
+            },
+            {
+                type: "Fabric",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/trin_trumon_Interior_Fabric.png',
+                shaders_grayscale: '#606060',
+            },
+            {
+                type: "Stitching",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/trin_trumon_Interior_Stitching.png',
+                shaders_grayscale: '#606060',
+            },
+            {
+                type: "Accent",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/trin_trumon_Interior_Accent.png',
+                shaders_grayscale: '#606060',
+            }
+        ],
+        paint_layers: [
+            {
+                id: 0,
+                type: "Base",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/trin_trumon_Base.png',
+                shaders_grayscale: '#606060',
+            },
+            {
+                id: 1,
+                type: "Layer",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/trin_trumon_Paint1.png',
+                shaders_grayscale: '#606060',
+            },
+            {
+                id: 2,
+                type: "Layer",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/trin_trumon_Paint2.png',
+                shaders_grayscale: '#606060',
+            },
+            {
+                id: 3,
+                type: "Layer",
+                URL: 'https://trin.legends-of-gramdatis.com/model_img/layers/trin_trumon_Paint3.png',
+                shaders_grayscale: '#606060',
+            }
+        ],
+    },
 ];
 
 // Define a mapping of part IDs to part texts
