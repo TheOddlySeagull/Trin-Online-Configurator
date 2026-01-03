@@ -2709,7 +2709,7 @@ export const trinCarModels = [
         vehicle_category: ["Commercial"],
         pack_name: "Trin Civil Pack",
         image: "https://trin.legends-of-gramdatis.com/model_img/trin_trumon.png",
-        variant: "Truck",
+        variant: "Trin Trumon Truck",
         base_engine: "I4",
         base_wheels: "standard",
         base_seats: 1,
