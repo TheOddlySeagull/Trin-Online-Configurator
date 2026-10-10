@@ -1185,3 +1185,35 @@ Custom Tiled Upload Styles
     background-size: cover;
     background-repeat: repeat;
 }
+/* In-page configuration naming dialog */
+.configuration-save-dialog {
+    box-sizing: border-box;
+    width: min(440px, calc(100vw - 32px));
+    padding: 24px;
+    border: 2px solid #99ffff;
+    border-radius: 8px;
+    background: #303030 url("./img/background_trin_modelcard.png") repeat;
+    color: #99ffff;
+    box-shadow: 0 12px 40px #0009;
+    font-family: Arial, sans-serif;
+}
+.configuration-save-dialog::backdrop { background: #000a; }
+.configuration-save-dialog form { display: flex; flex-direction: column; gap: 16px; }
+.configuration-save-dialog h2 { margin: 0; text-shadow: 2px 2px #000; }
+.configuration-save-dialog input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #99ffff;
+    border-radius: 4px;
+    background: #202020;
+    color: #fff;
+    font: inherit;
+}
+.configuration-save-dialog input:focus-visible { outline: 2px solid #99ffff; outline-offset: 3px; }
+.configuration-save-actions { display: flex; justify-content: flex-end; gap: 12px; }
+.configuration-save-actions .sub-button { width: auto; margin: 0; }
+.configuration-save-dialog button:disabled { opacity: .6; cursor: wait; }
+.configuration-save-error { color: #ffbaba; margin: 0; }
+.configuration-save-error:empty { display: none; }
+.configuration-save-status { color: #99ffff; padding: 0 10px; overflow-wrap: anywhere; }
