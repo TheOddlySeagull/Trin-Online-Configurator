@@ -430,7 +430,15 @@ export async function generateConfiguredPolychrome(model, selectedPaintColorPane
 }
 
 
-export async function update_Model_Texture() {
+let pendingTextureUpdate = Promise.resolve();
+export function waitForTextureUpdate() {
+  return pendingTextureUpdate;
+}
+export function update_Model_Texture() {
+  pendingTextureUpdate = generateModelTexture();
+  return pendingTextureUpdate;
+}
+async function generateModelTexture() {
 
   // Get the trinCarModels who's variant is current_configured_model.model
   const TrinModel = trinCarModels.find((TrinModel) => TrinModel.variant == current_configured_model.model);

@@ -1,7 +1,8 @@
+import { waitForTextureUpdate } from "./texture_generator.js";
 import { trinCarModels, factoryColors } from './data.js';
 import { createButtonSpecificPanel_ExteriorLayers_Selected, createButtonSpecificPanel_ExteriorLayers_Selector } from './configurator_paint_panels.js';
 import { createButtonSpecificPanel_InteriorTrim_Selected, createButtonSpecificPanel_InteriorTrim_Selector } from './configurator_interior_panels.js';
-import { save_new_configuration } from './comunicator.js';
+import { save_configuration, current_configured_model, editing_configuration_id } from './comunicator.js';
 
 /*
 ######################################################################
@@ -131,11 +132,27 @@ export function createButtonPanelDiv(model) {
   const interiorButton = createPanelButton("Interior");
   buttonPanel.appendChild(interiorButton);
 
-  // Add event listener to the "save" button to handle main button click
-  saveButton.firstElementChild.addEventListener("click", () => {
-    alert("Saved configuration!");
-    save_new_configuration();
-  });
+  const saveAsButton = createPanelButton("Save as");
+  saveAsButton.style.display = editing_configuration_id ? "" : "none";
+  buttonPanel.insertBefore(saveAsButton, paintButton);
+
+  async function save(saveAs) {
+    const name = prompt("Configuration name", current_configured_model.name || model.variant);
+    if (name === null) return;
+    try {
+      await waitForTextureUpdate();
+      save_configuration(name, saveAs);
+      saveAsButton.style.display = "";
+      const params = new URLSearchParams(window.location.search);
+      params.set("edit", editing_configuration_id);
+      window.history.replaceState(null, "", `?${params}`);
+      alert("Saved configuration!");
+    } catch (error) {
+      alert(`Could not save configuration: ${error.message}`);
+    }
+  }
+  saveButton.firstElementChild.addEventListener("click", () => save(false));
+  saveAsButton.firstElementChild.addEventListener("click", () => save(true));
 
   // Add event listener to the "paint" button to handle main button click
   paintButton.firstElementChild.addEventListener("click", () => {

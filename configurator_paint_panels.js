@@ -277,7 +277,7 @@ export function createButtonSpecificPanel_ExteriorLayers_Selected( monochrome = 
         }
         //If not monochrome, add layers until we have the same amount as the model
         else {
-            while (current_configured_model.paint_layers.length < model.paint_layers.length-1) {
+            while (current_configured_model.paint_layers.length < model.paint_layers.filter(layer => layer.type === "Layer").length) {
                 current_configured_model.paint_layers.push("Glacier White");
                 current_configured_model.paint_price.push(0);
             }

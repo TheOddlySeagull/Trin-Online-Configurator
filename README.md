@@ -61,3 +61,15 @@ validation, lookup, tiling, composition, and load failures:
 npm install --no-save --package-lock=false @napi-rs/canvas
 node scripts/test-custom-wraps.cjs
 ```
+
+## Editing saved configurations
+Use **Edit** on a card in My Configurations to reopen its vehicle with its saved
+texture, paint layers, upholstery, accent, and part values. **Save** asks for a
+configuration name and updates that entry. **Save as** asks for a name and creates
+a separate copy; subsequent saves update the copy. Canceling the name prompt
+leaves stored configurations unchanged. Older unnamed configurations use the
+vehicle model as their initial name and receive stable IDs automatically.
+
+```bash
+node scripts/test-configuration-editing.cjs
+```
