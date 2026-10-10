@@ -57,7 +57,10 @@ function downloadConfigurationAsJSON(configuration) {
     // Create a temporary anchor element for download
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(blob);
-    downloadLink.download = 'configuration.json'; // Set the desired file name
+    const name = String(configuration.name || configuration.model || 'configuration')
+        .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '_')
+        .trim().replace(/[. ]+$/g, '').slice(0, 120);
+    downloadLink.download = `${name || 'configuration'}.json`;
 
     // Programmatically trigger a click event on the anchor element
     document.body.appendChild(downloadLink);
