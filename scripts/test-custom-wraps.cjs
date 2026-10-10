@@ -2,7 +2,6 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const { randomUUID } = require("node:crypto");
 const { createCanvas, Image } = require('@napi-rs/canvas');
 const storage = new Map();
 const context = vm.createContext({console: {log(){}}, Image, URL, Uint8Array,
@@ -31,38 +30,7 @@ await context.validateWrap(red);
 await assert.rejects(context.validateWrap('http://example.com/wrap.png'),/HTTPS/);
 context.fetch=async()=>({ok:true,arrayBuffer:async()=>new Uint8Array([1,2,3]).buffer});
 await assert.rejects(context.validateWrap('https://example.com/not-png'),/directly/);
-// Exercise IndexedDB transactions with the user's 8 MB PNG, without localStorage image data.
-const images = new Map();
-context.crypto = { randomUUID };
-context.URL = { createObjectURL: blob => 'data:image/png;base64,' + blob.bytes.toString('base64') };
-context.indexedDB = { open() {
-    const request = {};
-    setImmediate(() => {
-        request.result = { transaction() {
-            const transaction = { objectStore() { return {
-                put(blob, key) { images.set(key, blob); setImmediate(() => transaction.oncomplete()); },
-                get(key) { const result = {}; setImmediate(() => { result.result = images.get(key); result.onsuccess(); }); return result; }
-            }; } };
-            return transaction;
-        } };
-        request.onsuccess();
-    });
-    return request;
-} };
-const fixture = process.argv[2];
-const bytes = fixture ? fs.readFileSync(fixture) : Buffer.from(red.split(',')[1], 'base64');
-const reference = await context.storeWrapImage({ bytes });
-assert.equal(context.get_body_texture_type(reference), 'CustomTiled');
-context.saveCustomWraps([{name: 'Clouds', texture: reference}]);
-assert.ok(storage.get('uploadedTextures').length < 200);
-const source = await context.getCustomWrapSource(reference);
-assert.deepEqual(Buffer.from(source.split(',')[1], 'base64'), bytes);
-await assert.rejects(context.getCustomWrapSource('customwrap:missing'), /missing/);
 load('texture_generator.js');
-const largeCanvas = createCanvas(512, 512);
-await context.applyCustomTiledTexture(mask, reference, largeCanvas.getContext('2d'));
-assert.ok(largeCanvas.toDataURL().startsWith('data:image/png'));
-
 const canvas=createCanvas(2,2);await context.applyCustomTiledTexture(mask,red,canvas.getContext('2d'));
 assert.deepEqual([...canvas.getContext('2d').getImageData(0,0,1,1).data],[255,0,0,255]);
 const result=createCanvas(2,2);await context.generateNewCanvas(blue,[canvas],result.getContext('2d'),2,2);

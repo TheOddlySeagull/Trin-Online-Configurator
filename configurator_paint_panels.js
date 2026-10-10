@@ -1,6 +1,6 @@
 import { get_body_texture_type, factoryColors, factoryWraps, factoryWoods } from "./data.js";
 import { current_configured_model, get_current_full_model } from './comunicator.js';
-import { loadCustomWraps, getCustomWrapSource } from "./custom_wraps.js";
+import { loadCustomWraps } from "./custom_wraps.js";
 import { update_Model_Texture } from './texture_generator.js';
 
 /*
@@ -222,9 +222,7 @@ export function createPaintShowcasePanel(texture_name = "Glacier White", type = 
         paintShowcasePanelTop.style.alignItems = "center";
 
         const previewImage = document.createElement("div");
-        getCustomWrapSource(texture_name).then(source => {
-            previewImage.style.backgroundImage = `url(${JSON.stringify(source)})`;
-        }).catch(error => { previewImage.textContent = error.message; });
+        previewImage.style.backgroundImage = `url(${JSON.stringify(texture_name)})`;
         previewImage.style.backgroundRepeat = "repeat";
         previewImage.style.width = "100%";
         previewImage.style.height = "100%";

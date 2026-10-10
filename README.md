@@ -52,9 +52,7 @@ PNG file instead. Select the saved image under `CustomTiled` in the exterior
 selector. Images repeat at their native pixel size and are masked to the selected
 paint layer. The library of wraps is stored in this browser, while each vehicle
 configuration retains its selected image source. Previously uploaded skins are
-also available. Uploaded PNGs are kept as binary images in IndexedDB, avoiding
-the small localStorage quota. Vehicle configurations keep a stable browser-local
-image reference; no resizing or quality loss is applied.
+also available.
 
 Custom wrap regression checks use real canvas pixels and cover migration,
 validation, lookup, tiling, composition, and load failures:
