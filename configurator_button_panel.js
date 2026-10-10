@@ -1,7 +1,8 @@
+import { waitForTextureUpdate } from "./texture_generator.js";
 import { trinCarModels, factoryColors } from './data.js';
 import { createButtonSpecificPanel_ExteriorLayers_Selected, createButtonSpecificPanel_ExteriorLayers_Selector } from './configurator_paint_panels.js';
 import { createButtonSpecificPanel_InteriorTrim_Selected, createButtonSpecificPanel_InteriorTrim_Selector } from './configurator_interior_panels.js';
-import { save_new_configuration } from './comunicator.js';
+import { save_configuration, current_configured_model, editing_configuration_id } from './comunicator.js';
 
 /*
 ######################################################################
@@ -131,11 +132,87 @@ export function createButtonPanelDiv(model) {
   const interiorButton = createPanelButton("Interior");
   buttonPanel.appendChild(interiorButton);
 
-  // Add event listener to the "save" button to handle main button click
-  saveButton.firstElementChild.addEventListener("click", () => {
-    alert("Saved configuration!");
-    save_new_configuration();
-  });
+  const saveAsButton = createPanelButton("Save as");
+  saveAsButton.style.display = editing_configuration_id ? "" : "none";
+  buttonPanel.insertBefore(saveAsButton, paintButton);
+
+  const saveStatus = document.createElement("p");
+  saveStatus.className = "configuration-save-status";
+  saveStatus.setAttribute("role", "status");
+  buttonPanel.appendChild(saveStatus);
+
+  function openSaveDialog(saveAs) {
+    if (document.querySelector(".configuration-save-dialog")) return;
+    const dialog = document.createElement("dialog");
+    dialog.className = "configuration-save-dialog";
+    dialog.setAttribute("aria-labelledby", "configuration-save-title");
+    const form = document.createElement("form");
+    const title = document.createElement("h2");
+    title.id = "configuration-save-title";
+    title.textContent = saveAs ? "Save configuration as" : "Save configuration";
+    const label = document.createElement("label");
+    label.htmlFor = "configuration-save-name";
+    label.textContent = "Configuration name";
+    const input = document.createElement("input");
+    input.id = "configuration-save-name";
+    input.type = "text";
+    input.value = current_configured_model.name || model.variant;
+    input.autocomplete = "off";
+    const errorMessage = document.createElement("p");
+    errorMessage.className = "configuration-save-error";
+    errorMessage.setAttribute("role", "alert");
+    const actions = document.createElement("div");
+    actions.className = "configuration-save-actions";
+    const cancel = document.createElement("button");
+    cancel.type = "button";
+    cancel.className = "sub-button";
+    cancel.textContent = "Cancel";
+    cancel.onclick = () => dialog.close();
+    const submit = document.createElement("button");
+    submit.type = "submit";
+    submit.className = "main-button";
+    submit.textContent = saveAs ? "Save as" : "Save";
+    actions.append(cancel, submit);
+    form.append(title, label, input, errorMessage, actions);
+    dialog.appendChild(form);
+    dialog.addEventListener("close", () => dialog.remove());
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      if (!input.value.trim()) {
+        errorMessage.textContent = "Please provide a configuration name.";
+        input.focus();
+        return;
+      }
+      submit.disabled = true;
+      cancel.disabled = true;
+      input.disabled = true;
+      const preventCancel = event => event.preventDefault();
+      dialog.addEventListener("cancel", preventCancel);
+      errorMessage.textContent = "";
+      try {
+        await waitForTextureUpdate();
+        save_configuration(input.value, saveAs);
+        saveAsButton.style.display = "";
+        const params = new URLSearchParams(window.location.search);
+        params.set("edit", editing_configuration_id);
+        window.history.replaceState(null, "", `?${params}`);
+        saveStatus.textContent = `Saved “${current_configured_model.name}”.`;
+        dialog.close();
+      } catch (error) {
+        errorMessage.textContent = `Could not save configuration: ${error.message}`;
+        submit.disabled = false;
+        cancel.disabled = false;
+        input.disabled = false;
+        dialog.removeEventListener("cancel", preventCancel);
+      }
+    });
+    document.body.appendChild(dialog);
+    dialog.showModal();
+    input.focus();
+    input.select();
+  }
+  saveButton.firstElementChild.addEventListener("click", () => openSaveDialog(false));
+  saveAsButton.firstElementChild.addEventListener("click", () => openSaveDialog(true));
 
   // Add event listener to the "paint" button to handle main button click
   paintButton.firstElementChild.addEventListener("click", () => {

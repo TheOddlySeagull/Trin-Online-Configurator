@@ -1,3 +1,4 @@
+import { resolveAssetURL } from "./asset_path.js";
 import { factoryColors, factoryWraps, factoryWoods, interiorColors, interiorAccents, trinCarModels, get_body_texture_type, get_interior_texture_type, get_texture, get_full_interior_textile } from "./data.js";
 import { createRenderPanel } from './configurator_renderer.js';
 import { current_configured_model } from './comunicator.js';
@@ -9,7 +10,7 @@ var originalLayer2ImageUrl = "https://trin.legends-of-gramdatis.com/model_img/la
 
 // Function to apply the texture to the non-transparent pixels of the canvas
 function applyTexture(layerImageUrl, textureImageUrl, ctx) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
 
     // Create an image element for the layer drawing
     const layerDrawingImg = new Image();
@@ -39,14 +40,18 @@ function applyTexture(layerImageUrl, textureImageUrl, ctx) {
 
         resolve(); // Resolve the promise once the texture is applied
       };
-      textureImg.src = textureImageUrl;
+      textureImg.crossOrigin = "anonymous";
+      textureImg.onerror = () => reject(new Error("Unable to load wrap. Use a direct PNG link with CORS enabled, or upload the PNG file."));
+      textureImg.src = resolveAssetURL(textureImageUrl);
     };
-    layerDrawingImg.src = layerImageUrl;
+    layerDrawingImg.crossOrigin = "anonymous";
+    layerDrawingImg.onerror = () => reject(new Error("Unable to load paint layer."));
+    layerDrawingImg.src = resolveAssetURL(layerImageUrl);
   });
 }
 
 function applyCustomTiledTexture(layerImageUrl, textureImageUrl, ctx) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const layerDrawingImg = new Image();
     layerDrawingImg.onload = function () {
       const textureImg = new Image();
@@ -58,16 +63,20 @@ function applyCustomTiledTexture(layerImageUrl, textureImageUrl, ctx) {
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         resolve();
       };
-      textureImg.src = textureImageUrl;
+      textureImg.crossOrigin = "anonymous";
+      textureImg.onerror = () => reject(new Error("Unable to load wrap. Use a direct PNG link with CORS enabled, or upload the PNG file."));
+      textureImg.src = resolveAssetURL(textureImageUrl);
     };
-    layerDrawingImg.src = layerImageUrl;
+    layerDrawingImg.crossOrigin = "anonymous";
+    layerDrawingImg.onerror = () => reject(new Error("Unable to load paint layer."));
+    layerDrawingImg.src = resolveAssetURL(layerImageUrl);
   });
 }
 
 // Function to apply a hex color to the non-transparent pixels of the canvas
 function applyColor(layerImageUrl, hexColor, ctx) {
   console.log("Applying color: " + hexColor);
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
 
     // Create an image element for the layer drawing
     const layerDrawingImg = new Image();
@@ -94,34 +103,41 @@ function applyColor(layerImageUrl, hexColor, ctx) {
 
       resolve(); // Resolve the promise once the color is applied
     };
-    layerDrawingImg.src = layerImageUrl;
+    layerDrawingImg.crossOrigin = "anonymous";
+    layerDrawingImg.onerror = () => reject(new Error("Unable to load paint layer."));
+    layerDrawingImg.src = resolveAssetURL(layerImageUrl);
   });
 }
 
 // Function to generate a new canvas with layered retextured and recolored layers
 function generateNewCanvas(baseImageUrl, layers, ctxResult, canvas_width = 512, canvas_height = 512) {
-  const tempCanvas = document.createElement("canvas");
-  tempCanvas.width = canvas_width;
-  tempCanvas.height = canvas_height;
-  const tempCtx = tempCanvas.getContext("2d");
+  return new Promise((resolve, reject) => {
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = canvas_width;
+    tempCanvas.height = canvas_height;
+    const tempCtx = tempCanvas.getContext("2d");
 
-  // Draw the base image on the temporary canvas
-  const baseImage = new Image();
-  baseImage.onload = function() {
-      tempCtx.drawImage(baseImage, 0, 0);
+    // Draw the base image on the temporary canvas
+    const baseImage = new Image();
+    baseImage.onload = function() {
+        tempCtx.drawImage(baseImage, 0, 0);
 
-      // Draw the layers on the temporary canvas
-      for (const layer of layers) {
+        // Draw the layers on the temporary canvas
+        for (const layer of layers) {
 
-        tempCtx.globalCompositeOperation = "source-over";
-        tempCtx.drawImage(layer, 0, 0);
-      }
+          tempCtx.globalCompositeOperation = "source-over";
+          tempCtx.drawImage(layer, 0, 0);
+        }
 
-      // Draw the temporary canvas on the result canvas
-      ctxResult.clearRect(0, 0, canvas_width, canvas_height);
-      ctxResult.drawImage(tempCanvas, 0, 0); //LINE 102
-  };
-  baseImage.src = baseImageUrl;
+        // Draw the temporary canvas on the result canvas
+        ctxResult.clearRect(0, 0, canvas_width, canvas_height);
+        ctxResult.drawImage(tempCanvas, 0, 0);
+        resolve();
+    };
+    baseImage.onerror = () => reject(new Error("Unable to load base texture."));
+    baseImage.crossOrigin = "anonymous";
+    baseImage.src = resolveAssetURL(baseImageUrl);
+  });
 }
 
 function getTextureFromPanel(paintOptionContainer) {
@@ -131,7 +147,7 @@ function getTextureFromPanel(paintOptionContainer) {
 
   // Check if the textureName is in the factoryWoods, factoryWraps or factoryColors using ".find(color => color.name === textureName)", and keep the json it was found in
   let texture = factoryWoods.find(wood => wood.name === textureName)
-  
+
   if (texture) {
     return [texture.texture, texture.name, texture.exterior_price];
   } else {
@@ -250,13 +266,15 @@ export async function generateConfiguredMonochrome(model, selectedPaintColorPane
     overlayCanvas.height = model.skin_size_h || 512;
     const overlayCtx = overlayCanvas.getContext("2d");
 
-    const overlayPromise = new Promise((resolve) => {
+    const overlayPromise = new Promise((resolve, reject) => {
       const overlayImage = new Image();
       overlayImage.onload = function() {
         overlayCtx.drawImage(overlayImage, 0, 0);
         resolve();
       };
-      overlayImage.src = finish_overlay;
+      overlayImage.crossOrigin = "anonymous";
+      overlayImage.onerror = () => reject(new Error("Unable to load overlay."));
+      overlayImage.src = resolveAssetURL(finish_overlay);
     });
 
     layerPromises.push(overlayPromise);
@@ -265,12 +283,10 @@ export async function generateConfiguredMonochrome(model, selectedPaintColorPane
 
   // Wait for all the retexturing promises to resolve
   await Promise.all(layerPromises);
-  
-  // Now, all the layers have been retextured, and we can generate the new canvas
-  generateNewCanvas(baseLayerImageUrl, canvas_list, ctxResult, resultCanvas.width, resultCanvas.height);
 
-  // Delay for 500 milliseconds (adjust the delay time as needed)
-  await new Promise(resolve => setTimeout(resolve, 500));
+  // Now, all the layers have been retextured, and we can generate the new canvas
+  await generateNewCanvas(baseLayerImageUrl, canvas_list, ctxResult, resultCanvas.width, resultCanvas.height);
+
 
   // Get the div with configurator-central-model-render-panel id
   const renderer = document.getElementById("configurator-central-model-render-panel");
@@ -333,7 +349,7 @@ export async function generateConfiguredPolychrome(model, selectedPaintColorPane
 
   // For each paint layers:
   for (let layer of model.paint_layers) {
-    
+
     if (layer.type == "Base") {
       baseLayerImageUrl = layer.URL;
     }
@@ -359,7 +375,7 @@ export async function generateConfiguredPolychrome(model, selectedPaintColorPane
       } else {
         // Apply the texture and push the promise to the list
         layerPromises.push(applyTexture(layer.URL, textures_or_paints_code[canvas_layer_number - 1], ctx_list[canvas_layer_number - 1]));
-      
+
       }
     }
 
@@ -376,13 +392,15 @@ export async function generateConfiguredPolychrome(model, selectedPaintColorPane
     overlayCanvas.height = model.skin_size_h || 512;
     const overlayCtx = overlayCanvas.getContext("2d");
 
-    const overlayPromise = new Promise((resolve) => {
+    const overlayPromise = new Promise((resolve, reject) => {
       const overlayImage = new Image();
       overlayImage.onload = function() {
         overlayCtx.drawImage(overlayImage, 0, 0);
         resolve();
       };
-      overlayImage.src = finish_overlay;
+      overlayImage.crossOrigin = "anonymous";
+      overlayImage.onerror = () => reject(new Error("Unable to load overlay."));
+      overlayImage.src = resolveAssetURL(finish_overlay);
     });
 
     layerPromises.push(overlayPromise);
@@ -393,10 +411,8 @@ export async function generateConfiguredPolychrome(model, selectedPaintColorPane
   await Promise.all(layerPromises);
 
   // Now, all the layers have been retextured, and we can generate the new canvas
-  generateNewCanvas(baseLayerImageUrl, canvas_list, ctxResult, resultCanvas.width, resultCanvas.height);
+  await generateNewCanvas(baseLayerImageUrl, canvas_list, ctxResult, resultCanvas.width, resultCanvas.height);
 
-  // Delay for 500 milliseconds (adjust the delay time as needed)
-  await new Promise(resolve => setTimeout(resolve, 500));
 
   // Get the div with configurator-central-model-render-panel id
   const renderer = document.getElementById("configurator-central-model-render-panel");
@@ -414,7 +430,15 @@ export async function generateConfiguredPolychrome(model, selectedPaintColorPane
 }
 
 
-export async function update_Model_Texture() {
+let pendingTextureUpdate = Promise.resolve();
+export function waitForTextureUpdate() {
+  return pendingTextureUpdate;
+}
+export function update_Model_Texture() {
+  pendingTextureUpdate = generateModelTexture();
+  return pendingTextureUpdate;
+}
+async function generateModelTexture() {
 
   // Get the trinCarModels who's variant is current_configured_model.model
   const TrinModel = trinCarModels.find((TrinModel) => TrinModel.variant == current_configured_model.model);
@@ -456,7 +480,7 @@ export async function update_Model_Texture() {
 
   console.log("LENGTH: " + trin_model_layers.length);
   console.log("Trin model layers: " + trin_model_layers);
-  
+
   // if user in configuring a monochrome model
   if (current_configured_model.paint_layers.length == 1) {
     console.log("Monochrome model");
@@ -523,19 +547,21 @@ export async function update_Model_Texture() {
   // if there is an overlay, add it to the end of the layerPromises
   if (finish_overlay) {
     console.log("Finish overlay found: " + finish_overlay);
-    
+
     const overlayCanvas = document.createElement("canvas");
     overlayCanvas.width = TrinModel.skin_size_w || 512;
     overlayCanvas.height = TrinModel.skin_size_h || 512;
     const overlayCtx = overlayCanvas.getContext("2d");
 
-    const overlayPromise = new Promise((resolve) => {
+    const overlayPromise = new Promise((resolve, reject) => {
       const overlayImage = new Image();
       overlayImage.onload = function() {
         overlayCtx.drawImage(overlayImage, 0, 0);
         resolve();
       };
-      overlayImage.src = finish_overlay;
+      overlayImage.crossOrigin = "anonymous";
+      overlayImage.onerror = () => reject(new Error("Unable to load overlay."));
+      overlayImage.src = resolveAssetURL(finish_overlay);
     });
 
     paintLayerPromises.push(overlayPromise);
@@ -547,7 +573,7 @@ export async function update_Model_Texture() {
   // ########################################################################################################################
 
   var actual_interior_textile = get_full_interior_textile(current_configured_model.interior);
-  
+
   for (let i = 0; i < TrinModel.interior_layers.length; i++) {
 
     // Create a canvas for the layer called "canvasInteriorLayer{layer_number}"
@@ -593,10 +619,8 @@ export async function update_Model_Texture() {
   await Promise.all(paintLayerPromises);
 
   // Now, all the layers have been retextured, and we can generate the new canvas
-  generateNewCanvas(baseLayerImageUrl, canvas_list, ctxResult, resultCanvas.width, resultCanvas.height);
+  await generateNewCanvas(baseLayerImageUrl, canvas_list, ctxResult, resultCanvas.width, resultCanvas.height);
 
-  // Delay for 500 milliseconds (adjust the delay time as needed)
-  await new Promise(resolve => setTimeout(resolve, 500));
 
   // Generate a PNG URL from the canvas
   const new_texture_URL = generatePngUrlFromCanvas(resultCanvas);

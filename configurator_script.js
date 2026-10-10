@@ -1,7 +1,8 @@
+import { restoreInteriorSelection } from "./configurator_interior_panels.js";
 import { trinCarModels } from './data.js';
 import { createRenderPanel } from './configurator_renderer.js';
 import { createButtonPanelDiv, createButtonSpecificPanel } from './configurator_button_panel.js';
-import { calculateCurrentPrice, updatePricing, current_configured_model, resetCurrentModel } from './comunicator.js';
+import { calculateCurrentPrice, updatePricing, current_configured_model, resetCurrentModel, load_saved_configuration, calculatePrice, editing_configuration_id } from './comunicator.js';
 
 
 const modelConfiguratorContainer = document.querySelector(".model-configurator-container");
@@ -29,6 +30,8 @@ function createConfigurator(model) {
   updatePricing("base", model.base_price);
 
   //=====================================================================
+
+  restoreInteriorSelection();
 
   // Create the configurator
   const modelConfigurator = document.createElement("div");
@@ -110,7 +113,7 @@ function createConfiguratorHeader(model) {
 
   // Add Model price to headerModelPrice
   const headerSUB_ModelPriceValue = document.createElement("h3");
-  headerSUB_ModelPriceValue.textContent = `${calculateCurrentPrice()} grons`;
+  headerSUB_ModelPriceValue.textContent = `${calculatePrice(current_configured_model)} grons`;
   headerModelPrice.appendChild(headerSUB_ModelPriceValue);
 
   //=====================================================================
@@ -144,12 +147,13 @@ function createConfiguratorCentral(model) {
   //=====================================================================
 
   // Create the configurator button specific panel
-  const configuratorButtonSpecificPanel = createButtonSpecificPanel(model);
+  const configuratorButtonSpecificPanel = createButtonSpecificPanel(
+    editing_configuration_id ? (current_configured_model.paint_layers.length > 1 ? "Polychrome" : "Monochrome") : null, model);
 
   //=====================================================================
 
   // Create the configurator render panel
-  const configuratorRenderPanel = createRenderPanel(model);
+  const configuratorRenderPanel = createRenderPanel(model, current_configured_model.texture_url);
 
   //=====================================================================
 
@@ -187,7 +191,18 @@ function renderModelConfigurator() {
   } else {
     // Update the current model
     resetCurrentModel(modelToShow);
+    if (urlParams.has("edit")) {
+      try {
+        const saved = load_saved_configuration(urlParams.get("edit"));
+        if (saved.model !== modelToShow.variant) throw new Error("Configuration does not match this vehicle.");
+      } catch (error) {
+        modelConfiguratorContainer.textContent = error.message;
+        return;
+      }
+    }
   }
+
+  restoreInteriorSelection();
 
   // Create the configurator
   const modelConfigurator = createConfigurator(modelToShow);

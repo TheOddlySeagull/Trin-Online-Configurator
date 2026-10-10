@@ -1,5 +1,6 @@
 import { get_body_texture_type, factoryColors, factoryWraps, factoryWoods } from "./data.js";
 import { current_configured_model, get_current_full_model } from './comunicator.js';
+import { loadCustomWraps } from "./custom_wraps.js";
 import { update_Model_Texture } from './texture_generator.js';
 
 /*
@@ -177,12 +178,7 @@ export function createPaintShowcasePanel(texture_name = "Glacier White", type = 
     } else if (type == "Custom") {
         var color = { name: texture_name, hex: texture_name, price: 5000 };
     } else if (type == "CustomTiled") {
-        const customTexture = localStorage.getItem('customTiledTexture');
-        var color = { 
-            name: "Custom Tiled Texture", 
-            texture: customTexture || "https://trin.legends-of-gramdatis.com/img/default_texture.png", 
-            price: 5000 
-        };
+        var color = { name: "Custom Wrap", texture: texture_name, price: 5000 };
     } else {
         console.error(`Invalid type "${type}" passed to createPaintShowcasePanel.`);
         return document.createElement("div"); // Return an empty div as a fallback
@@ -226,15 +222,8 @@ export function createPaintShowcasePanel(texture_name = "Glacier White", type = 
         paintShowcasePanelTop.style.alignItems = "center";
 
         const previewImage = document.createElement("div");
-        const customTexture = localStorage.getItem('customTiledTexture');
-        if (customTexture) {
-            previewImage.style.backgroundImage = `url(${customTexture})`;
-            previewImage.style.backgroundSize = "cover";
-            previewImage.style.backgroundRepeat = "repeat";
-        } else {
-            previewImage.textContent = "No texture uploaded";
-            previewImage.style.color = "#000";
-        }
+        previewImage.style.backgroundImage = `url(${JSON.stringify(texture_name)})`;
+        previewImage.style.backgroundRepeat = "repeat";
         previewImage.style.width = "100%";
         previewImage.style.height = "100%";
         paintShowcasePanelTop.appendChild(previewImage);
@@ -288,7 +277,7 @@ export function createButtonSpecificPanel_ExteriorLayers_Selected( monochrome = 
         }
         //If not monochrome, add layers until we have the same amount as the model
         else {
-            while (current_configured_model.paint_layers.length < model.paint_layers.length-1) {
+            while (current_configured_model.paint_layers.length < model.paint_layers.filter(layer => layer.type === "Layer").length) {
                 current_configured_model.paint_layers.push("Glacier White");
                 current_configured_model.paint_price.push(0);
             }
@@ -424,13 +413,13 @@ function createButtonSpecificPanel_ExteriorLayers_Selector_LayerType() {
         exteriorLayerTypePanel.appendChild(showcasePanel);
     } else if (exterior_LayerType_Options[currentPaint_Type_Index] == "CustomTiled") {
         // Display the user's uploaded textures
-        const uploadedTextures = JSON.parse(localStorage.getItem('uploadedTextures')) || [];
+        const uploadedTextures = loadCustomWraps();
         
         if (uploadedTextures.length > 0) {
             uploadedTextures.forEach(texture => {
-                const showcasePanel = createPaintShowcasePanel(texture.name, "CustomTiled");
+                const showcasePanel = createPaintShowcasePanel(texture.texture, "CustomTiled");
                 showcasePanel.addEventListener("click", () => {
-                    current_configured_model.paint_layers[currentPaint_Layer_Index] = texture.name;
+                    current_configured_model.paint_layers[currentPaint_Layer_Index] = texture.texture;
                     current_configured_model.paint_price[currentPaint_Layer_Index] = 5000;
                     updateButtonSpecificPanel_ExteriorLayers_Selected();
                 });
@@ -447,7 +436,9 @@ function createButtonSpecificPanel_ExteriorLayers_Selector_LayerType() {
         // Add a link to the upload page
         const uploadLink = document.createElement("a");
         uploadLink.href = "upload_texture.html";
-        uploadLink.textContent = "Upload a new texture";
+        uploadLink.target = "_blank";
+        uploadLink.rel = "noopener";
+        uploadLink.textContent = "Add a custom wrap";
         uploadLink.style.display = "block";
         uploadLink.style.marginTop = "10px";
         uploadLink.style.textAlign = "center";
@@ -490,7 +481,10 @@ function updateButtonSpecificPanel_ExteriorLayers_Selected() {
     console.log(current_configured_model);
 
     // Update the rendered model
-    update_Model_Texture();
+    update_Model_Texture().catch(error => {
+        console.error(error);
+        alert(error.message);
+    });
 }
 
 function updateButtonSpecificPanel_ExteriorLayers_Selector() {
@@ -515,3 +509,10 @@ function updateButtonSpecificPanel_ExteriorLayers_Selector_LayerType() {
 
 
 
+
+window.addEventListener("storage", (event) => {
+    if (["uploadedTextures", "uploadedSkins"].includes(event.key) &&
+        document.getElementById("exterior-layer-type-selector")) {
+        updateButtonSpecificPanel_ExteriorLayers_Selector_LayerType();
+    }
+});

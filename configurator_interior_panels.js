@@ -10,6 +10,9 @@ Globals
 
 var has_accent = false;
 export var accent_enabled = false;
+export function restoreInteriorSelection() {
+    accent_enabled = current_configured_model.has_interior_accent && current_configured_model.interior_accent != null;
+}
 var cycleButton_Index_InteriorTrim = 0;
 var cycleButton_Index_InteriorAccent = 0;
 var interior_trim_options = ["Upholstery"];
