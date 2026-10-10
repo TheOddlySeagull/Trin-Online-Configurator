@@ -1,3 +1,4 @@
+import { getCustomWrapSource } from "./custom_wraps.js";
 import { resolveAssetURL } from "./asset_path.js";
 import { factoryColors, factoryWraps, factoryWoods, interiorColors, interiorAccents, trinCarModels, get_body_texture_type, get_interior_texture_type, get_texture, get_full_interior_textile } from "./data.js";
 import { createRenderPanel } from './configurator_renderer.js';
@@ -50,7 +51,8 @@ function applyTexture(layerImageUrl, textureImageUrl, ctx) {
   });
 }
 
-function applyCustomTiledTexture(layerImageUrl, textureImageUrl, ctx) {
+async function applyCustomTiledTexture(layerImageUrl, textureImageUrl, ctx) {
+  textureImageUrl = await getCustomWrapSource(textureImageUrl);
   return new Promise((resolve, reject) => {
     const layerDrawingImg = new Image();
     layerDrawingImg.onload = function () {

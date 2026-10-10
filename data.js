@@ -3426,7 +3426,7 @@ export function get_body_texture_type(texture_name) {
         var texture_type = "Wood";
     } else if (texture_name.startsWith("#")) {
         var texture_type = "Custom";
-    } else if (/^(data:image\/|https?:\/\/)/i.test(texture_name)) {
+    } else if (/^(customwrap:|data:image\/|https?:\/\/)/i.test(texture_name)) {
         var texture_type = "CustomTiled";
     } else {
         console.log("Body texture type not found");
