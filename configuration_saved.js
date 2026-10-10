@@ -1,3 +1,4 @@
+import { loadCustomWraps } from "./custom_wraps.js";
 import { delete_saved_configuration, calculatePrice, save_new_configuration, get_saved_configurations } from "./comunicator.js";
 import { trinCarModels, partMapping, get_texture, get_interior_texture_type } from "./data.js";
 import { addTextureToModel } from "./three_model_viewer.js";
@@ -171,7 +172,18 @@ export function create_saved_configuration_card(configuration) {
     // Add the paints to the list
     for (let i = 0; i < configuration.paint_layers.length; i++) {
         const paint = document.createElement('li');
-        paint.innerHTML = configuration.paint_layers[i] + ": " + configuration.paint_price[i] + " grons";
+        const source = configuration.paint_layers[i];
+        const customWrap = /^(data:image\/|https?:\/\/)/i.test(source);
+        const wrap = customWrap ? loadCustomWraps().find(wrap => wrap.texture === source) : null;
+        const label = customWrap ? (wrap ? wrap.name : "Custom Wrap") : source;
+        paint.textContent = label + ": " + configuration.paint_price[i] + " grons";
+        if (customWrap) {
+            const thumbnail = document.createElement("img");
+            thumbnail.src = source;
+            thumbnail.alt = "Custom wrap preview";
+            thumbnail.className = "saved-wrap-thumbnail";
+            paint.prepend(thumbnail);
+        }
         paintList.appendChild(paint);
     }
 

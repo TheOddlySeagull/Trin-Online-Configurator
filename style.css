@@ -1217,3 +1217,14 @@ Custom Tiled Upload Styles
 .configuration-save-error { color: #ffbaba; margin: 0; }
 .configuration-save-error:empty { display: none; }
 .configuration-save-status { color: #99ffff; padding: 0 10px; overflow-wrap: anywhere; }
+
+.saved-wrap-thumbnail {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    image-rendering: pixelated;
+    vertical-align: middle;
+    margin: 4px 8px 4px 0;
+    border: 1px solid #99ffff;
+}
+.saved-configuration-card-details { min-width: 0; overflow-wrap: anywhere; }
