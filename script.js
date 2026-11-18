@@ -34,7 +34,7 @@ function createCivilModelCard(model) {
   // Wrap the model image inside an anchor tag
   const modelImageLink = document.createElement("a");
   modelImageLink.addEventListener("click", () => resetCurrentModel(model));
-  modelImageLink.href = `trin_configurator.html?model=${model.variant}`;
+  modelImageLink.href = `trin_configurator.html?model=${encodeURIComponent(model.variant)}`;
 
   // Create an <img> element for the model image
   const modelImage = document.createElement("img");
@@ -88,7 +88,7 @@ function createCivilModelCard(model) {
   configureButton.classList.add("civil-model-generate-button"); // Add the civil-model-generate-button class
   configureButton.addEventListener("click", () => {
       // Redirect to the Trin model page when clicked on "Configure" button
-      window.location.href = `trin_configurator.html?model=${model.variant}`;
+      window.location.href = `trin_configurator.html?model=${encodeURIComponent(model.variant)}`;
       resetCurrentModel(model);
 
   });
@@ -122,7 +122,7 @@ function createTXSModelCard(model) {
 
   // Wrap the model image inside an anchor tag
   const modelImageLink = document.createElement("a");
-  modelImageLink.href = `trin_configurator.html?model=${model.variant}`;
+  modelImageLink.href = `trin_configurator.html?model=${encodeURIComponent(model.variant)}`;
 
   // Create an <img> element for the model image
   const modelImage = document.createElement("img");
@@ -176,7 +176,7 @@ function createTXSModelCard(model) {
   configureButton.classList.add("txs-model-generate-button"); // Add the txs-model-generate-button class
   configureButton.addEventListener("click", () => {
       // Redirect to the Trin model page when clicked on "Configure" button
-      window.location.href = `trin_configurator.html?model=${model.variant}`;
+      window.location.href = `trin_configurator.html?model=${encodeURIComponent(model.variant)}`;
   });
 
   modelCard.appendChild(modelName);
@@ -209,7 +209,7 @@ function createCommercialModelCard(model) {
   // Wrap the model image inside an anchor tag
   const modelImageLink = document.createElement("a");
   modelImageLink.addEventListener("click", () => resetCurrentModel(model));
-  modelImageLink.href = `trin_configurator.html?model=${model.variant}`;
+  modelImageLink.href = `trin_configurator.html?model=${encodeURIComponent(model.variant)}`;
 
   // Create an <img> element for the model image
   const modelImage = document.createElement("img");
@@ -263,7 +263,7 @@ function createCommercialModelCard(model) {
   configureButton.classList.add("commercial-model-generate-button"); // Add the commercial-model-generate-button class
   configureButton.addEventListener("click", () => {
       // Redirect to the Trin model page when clicked on "Configure" button
-      window.location.href = `trin_configurator.html?model=${model.variant}`;
+      window.location.href = `trin_configurator.html?model=${encodeURIComponent(model.variant)}`;
       resetCurrentModel(model);
 
   });

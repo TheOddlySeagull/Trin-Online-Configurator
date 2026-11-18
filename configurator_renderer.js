@@ -48,7 +48,21 @@ export function createRenderPanel(model, obj_texture = model.obj_texture) {
   scene.position.y = 1.5;
 
   // Create the renderer
-  const renderer = new THREE.WebGLRenderer();
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer();
+  } catch (error) {
+    console.error('3D preview unavailable:', error);
+    const message = document.createElement('p');
+    message.textContent = '3D preview is unavailable. Enable WebGL or hardware acceleration in your browser. You can still edit and save your configuration.';
+    const preview = document.createElement('img');
+    preview.src = resolveAssetURL(obj_texture);
+    preview.alt = 'Configured vehicle texture';
+    preview.style.maxWidth = '100%';
+    preview.style.imageRendering = 'pixelated';
+    renderPanel.append(message, preview);
+    return renderPanel;
+  }
   renderer.setSize(panelWidth, panelHeight); // Set renderer size to match the panel size
   // Add the renderer to the div
   renderPanel.appendChild(renderer.domElement);

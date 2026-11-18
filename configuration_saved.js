@@ -1,4 +1,5 @@
-import { delete_saved_configuration, calculatePrice, save_new_configuration } from "./comunicator.js";
+import { loadCustomWraps } from "./custom_wraps.js";
+import { delete_saved_configuration, calculatePrice, save_new_configuration, get_saved_configurations } from "./comunicator.js";
 import { trinCarModels, partMapping, get_texture, get_interior_texture_type } from "./data.js";
 import { addTextureToModel } from "./three_model_viewer.js";
 import { createRenderPanel } from "./configurator_renderer.js";
@@ -10,8 +11,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // Function to reead all the configurations from the localStorage
 function read_configurations() {
     // Retrieving the list of saved configurations from localStorage
-    const storedData = localStorage.getItem('saved_configurations');
-    let saved_configurations = JSON.parse(storedData) || [];
+    let saved_configurations = get_saved_configurations();
 
     //Get the saved-configurations-container div
     const saved_configurations_container = document.getElementById('saved-configurations-container');
@@ -57,7 +57,10 @@ function downloadConfigurationAsJSON(configuration) {
     // Create a temporary anchor element for download
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(blob);
-    downloadLink.download = 'configuration.json'; // Set the desired file name
+    const name = String(configuration.name || configuration.model || 'configuration')
+        .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '_')
+        .trim().replace(/[. ]+$/g, '').slice(0, 120);
+    downloadLink.download = `${name || 'configuration'}.json`;
 
     // Programmatically trigger a click event on the anchor element
     document.body.appendChild(downloadLink);
@@ -71,12 +74,12 @@ async function importConfigurationFromJSON(file) {
     reader.onload = (event) => {
         try {
             const importedConfig = JSON.parse(event.target.result);
-            save_new_configuration(importedConfig); // Call your existing function to save the new configuration
+            const savedConfig = save_new_configuration(importedConfig); // Call your existing function to save the new configuration
             console.log('Configuration imported successfully:', importedConfig);
 
             //Get the saved-configurations-container div and add the new configuration card after the button (so as second child)
             const saved_configurations_container = document.getElementById('saved-configurations-container');
-            saved_configurations_container.insertBefore(create_saved_configuration_card(importedConfig), saved_configurations_container.children[1]);
+            saved_configurations_container.insertBefore(create_saved_configuration_card(savedConfig), saved_configurations_container.children[1]);
 
         } catch (error) {
             console.error('Error importing configuration:', error);
@@ -128,11 +131,15 @@ export function create_saved_configuration_card(configuration) {
 
     // Add title to top line
     const title = document.createElement('h3');
-    title.innerHTML = configuration.model;
+    title.textContent = configuration.name || configuration.model;
+    const modelName = document.createElement("p");
+    modelName.textContent = configuration.model;
+
 
     //----------------------------------------------------------------------------------------------------------
 
     topLine.appendChild(title);
+    topLine.appendChild(modelName);
 
     //##########################################################################################################
 
@@ -168,7 +175,18 @@ export function create_saved_configuration_card(configuration) {
     // Add the paints to the list
     for (let i = 0; i < configuration.paint_layers.length; i++) {
         const paint = document.createElement('li');
-        paint.innerHTML = configuration.paint_layers[i] + ": " + configuration.paint_price[i] + " grons";
+        const source = configuration.paint_layers[i];
+        const customWrap = /^(data:image\/|https?:\/\/)/i.test(source);
+        const wrap = customWrap ? loadCustomWraps().find(wrap => wrap.texture === source) : null;
+        const label = customWrap ? (wrap ? wrap.name : "Custom Wrap") : source;
+        paint.textContent = label + ": " + configuration.paint_price[i] + " grons";
+        if (customWrap) {
+            const thumbnail = document.createElement("img");
+            thumbnail.src = source;
+            thumbnail.alt = "Custom wrap preview";
+            thumbnail.className = "saved-wrap-thumbnail";
+            paint.prepend(thumbnail);
+        }
         paintList.appendChild(paint);
     }
 
@@ -310,6 +328,14 @@ export function create_saved_configuration_card(configuration) {
     });
 
     // Add the buttons to the button line
+    const editButton = document.createElement('button');
+    editButton.classList.add('saved-configuration-card-button');
+    editButton.textContent = 'Edit';
+    editButton.addEventListener('click', () => {
+        const params = new URLSearchParams({ model: configuration.model, edit: configuration.id });
+        window.location.href = `trin_configurator.html?${params}`;
+    });
+    buttonLine.appendChild(editButton);
     buttonLine.appendChild(removeButton);
     buttonLine.appendChild(shareButton);
     buttonLine.appendChild(exportButton);

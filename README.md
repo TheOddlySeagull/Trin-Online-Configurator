@@ -44,3 +44,32 @@ If you bump Three.js, update both mappings in the import map:
 - `three/addons/` examples path
 
 Then verify `OBJLoader` and `OrbitControls` import paths are unchanged.
+
+## Custom wraps
+Open `upload_texture.html` to add a PNG file or a direct HTTPS PNG link. Linked
+images must allow CORS; when a host blocks access, download the image and add the
+PNG file instead. Select the saved image under `CustomTiled` in the exterior
+selector. Images repeat at their native pixel size and are masked to the selected
+paint layer. The library of wraps is stored in this browser, while each vehicle
+configuration retains its selected image source. Previously uploaded skins are
+also available.
+
+Custom wrap regression checks use real canvas pixels and cover migration,
+validation, lookup, tiling, composition, and load failures:
+
+```bash
+npm install --no-save --package-lock=false @napi-rs/canvas
+node scripts/test-custom-wraps.cjs
+```
+
+## Editing saved configurations
+Use **Edit** on a card in My Configurations to reopen its vehicle with its saved
+texture, paint layers, upholstery, accent, and part values. **Save** asks for a
+configuration name and updates that entry. **Save as** asks for a name and creates
+a separate copy; subsequent saves update the copy. Canceling the name prompt
+leaves stored configurations unchanged. Older unnamed configurations use the
+vehicle model as their initial name and receive stable IDs automatically.
+
+```bash
+node scripts/test-configuration-editing.cjs
+```

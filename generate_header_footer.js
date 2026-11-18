@@ -4,17 +4,17 @@ function generate_header() {
     
     // Create an "a" element for the logo
     var logo = document.createElement("a");
-    // Add href to https://trin.legends-of-gramdatis.com
-    logo.setAttribute("href", "https://trin.legends-of-gramdatis.com");
+    // Keep navigation within this deployment.
+    logo.setAttribute("href", "./index.html");
 
     //Add both images
     var logo_img = document.createElement("img");
     logo_img.setAttribute("class", "logo");
-    logo_img.setAttribute("src", "https://trin.legends-of-gramdatis.com/img/trin_logo.png");
+    logo_img.setAttribute("src", "./img/trin_logo.png");
     logo_img.setAttribute("alt", "Trin Logo");
     var logo_img2 = document.createElement("img");
     logo_img2.setAttribute("class", "header-image");
-    logo_img2.setAttribute("src", "https://trin.legends-of-gramdatis.com/img/fancy_trin_text.png");
+    logo_img2.setAttribute("src", "./img/fancy_trin_text.png");
     logo_img2.setAttribute("alt", "Trin Fancy Text");
 
     // Add both images to the "a" element
@@ -27,7 +27,7 @@ function generate_header() {
 
     // Create a "a" element for the "My Configurations" button
     var my_configurations_button = document.createElement("a");
-    my_configurations_button.setAttribute("href", "https://trin.legends-of-gramdatis.com/trin_user_configurations.html");
+    my_configurations_button.setAttribute("href", "./trin_user_configurations.html");
     my_configurations_button.setAttribute("class", "my-configurations-link");
     my_configurations_button.innerHTML = "My Configurations";
 

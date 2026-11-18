@@ -84,6 +84,9 @@ export const current_configured_model = {
 };
 
 export function resetCurrentModel(model) {
+    editing_configuration_id = null;
+    delete current_configured_model.id;
+    delete current_configured_model.name;
     // Update the current model in the local storage
     current_configured_model.model = model.variant;
     current_configured_model.base_price = model.base_price;
@@ -121,64 +124,70 @@ export function resetCurrentModel(model) {
     return Promise.resolve();
 }
 
-// Function to save the current configuration in localStorage
-export async function save_new_configuration(config_to_save = current_configured_model) {
+export var editing_configuration_id = null;
 
-    // Retrieving the list of saved configurations from localStorage
-    const storedData = localStorage.getItem('saved_configurations');
-    let saved_configurations = JSON.parse(storedData) || [];
-
-    // Create a copy of config_to_save
-    let current_configured_model_copy = Object.assign({}, config_to_save);
-
-    // Add the current model to the list of saved configurations
-    saved_configurations.push(current_configured_model_copy);
-
-    // Save the updated list of saved configurations in localStorage
-    localStorage.setItem('saved_configurations', JSON.stringify(saved_configurations));
-
-    // Log the list of saved configurations in console
-    log_saved_configurations();
-}
-
-// Function to log in console the list of saved configurations
-export function log_saved_configurations() {
-    // Retrieving the list of saved configurations from localStorage
-    const storedData = localStorage.getItem('saved_configurations');
-    let saved_configurations = JSON.parse(storedData) || [];
-
-    // Log the list of saved configurations in console
-    console.log("List of saved configurations:");
-    console.log(saved_configurations);
-}
-
-// Function to return the list of saved configurations
 export function get_saved_configurations() {
-    // Retrieving the list of saved configurations from localStorage
-    const storedData = localStorage.getItem('saved_configurations');
-    let saved_configurations = JSON.parse(storedData) || [];
-
-    return saved_configurations;
-}
-
-// Function to delete a saved configuration
-export function delete_saved_configuration(configuration) {
-    // Retrieving the list of saved configurations from localStorage
-    const storedData = localStorage.getItem('saved_configurations');
-    let saved_configurations = JSON.parse(storedData) || [];
-
-    let new_saved_configurations = [];
-
-    // Navigate through the list of saved configurations
-    for (let i = 0; i < saved_configurations.length; i++) {
-        if (saved_configurations[i].texture_url != configuration.texture_url) {
-            // If the configuration is not the one to delete, add it to the new list of saved configurations
-            new_saved_configurations.push(saved_configurations[i]);
+    const configurations = JSON.parse(localStorage.getItem('saved_configurations')) || [];
+    let changed = false;
+    for (const configuration of configurations) {
+        if (!configuration.id) {
+            configuration.id = crypto.randomUUID();
+            changed = true;
         }
     }
+    if (changed) localStorage.setItem('saved_configurations', JSON.stringify(configurations));
+    return configurations;
+}
 
-    // Save the updated list of saved configurations in localStorage
-    localStorage.setItem('saved_configurations', JSON.stringify(new_saved_configurations));
+export function load_saved_configuration(id) {
+    const configuration = get_saved_configurations().find(configuration => configuration.id === id);
+    if (!configuration) throw new Error('This configuration no longer exists.');
+    Object.assign(current_configured_model, JSON.parse(JSON.stringify(configuration)));
+    editing_configuration_id = id;
+    return configuration;
+}
+
+export function save_configuration(name, save_as = false) {
+    name = name.trim();
+    if (!name) throw new Error('Please provide a configuration name.');
+    const configurations = get_saved_configurations();
+    const configuration = JSON.parse(JSON.stringify(current_configured_model));
+    configuration.name = name;
+    if (editing_configuration_id && !save_as) {
+        const index = configurations.findIndex(configuration => configuration.id === editing_configuration_id);
+        if (index === -1) throw new Error('This configuration was removed. Use Save as to create a copy.');
+        configuration.id = editing_configuration_id;
+        configurations[index] = configuration;
+    } else {
+        configuration.id = crypto.randomUUID();
+        configurations.push(configuration);
+    }
+    localStorage.setItem('saved_configurations', JSON.stringify(configurations));
+    Object.assign(current_configured_model, configuration);
+    editing_configuration_id = configuration.id;
+    return configuration;
+}
+
+// Imported configurations always receive their own identity.
+export function save_new_configuration(config_to_save = current_configured_model) {
+    const configurations = get_saved_configurations();
+    const configuration = JSON.parse(JSON.stringify(config_to_save));
+    configuration.id = crypto.randomUUID();
+    configuration.name = configuration.name || configuration.model;
+    configurations.push(configuration);
+    localStorage.setItem('saved_configurations', JSON.stringify(configurations));
+    return configuration;
+}
+
+export function log_saved_configurations() {
+    console.log(get_saved_configurations());
+}
+
+export function delete_saved_configuration(configuration) {
+    const configurations = get_saved_configurations();
+    localStorage.setItem('saved_configurations', JSON.stringify(
+        configurations.filter(saved => saved.id !== configuration.id)
+    ));
 }
 
 // Function to get the full model object from the model name
